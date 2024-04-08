@@ -123,6 +123,10 @@
 		display: none;
 	}
 
+	.name{
+		padding: 0px;
+	}
+
 	.menu {
 		display: block;
 		width: 140px;
@@ -161,7 +165,7 @@
 		display: block;
 		width: 36px;
 		height: 36px;
-		margin-right: 4vw;
+		margin-right: 1.5vw;
 	}
 
 	.profile {
