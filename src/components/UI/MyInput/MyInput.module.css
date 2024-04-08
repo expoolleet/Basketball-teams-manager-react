@@ -1,0 +1,141 @@
+/* @media (min-width: 220px) {
+	.myInput {
+		width: 190px;
+	}
+
+	.myInput input {
+		width: 190px;
+	}
+}
+
+@media (min-width: 320px) {
+	.myInput {
+		width: 285px;
+	}
+
+	.myInput input {
+		width: 285px;
+	}
+}
+
+@media (min-width: 400px) {
+	.myInput {
+		width: 327px;
+	}
+
+	.myInput input {
+		width: 327px;
+	}
+}
+
+@media (min-width: 1025px) {
+	.myInput {
+		width: 366px;
+	}
+
+	.myInput input {
+		width: 366px;
+	}
+} */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+	-moz-appearance: textfield;
+  }
+
+.myInput input{
+	width: 100%;
+}
+
+.myInput {
+	min-height: 92px;
+	width: 100%;
+}
+
+.myInput input[type='text'] {
+	letter-spacing: 0.02em;
+}
+
+.myInput input[type='password'] {
+	letter-spacing: 0.2em;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+	display: none;
+}
+
+.label {
+	font-size: 14px;
+	line-height: 24px;
+	color: #707070;
+}
+
+.myInput input {
+	background-color: #f6f6f6;
+	border: none;
+	border-radius: 4px;
+	height: 40px;
+	padding-left: 15px;
+	margin-top: 3px;
+}
+
+.myInput input:hover {
+	background-color: #d1d1d1;
+}
+
+.myInput input:focus {
+	box-shadow: 0 0 5px #d9d9d9;
+	caret-color: rgba(0, 0, 0, 0.35);
+}
+
+.myInput input:focus {
+	outline: none;
+}
+
+.myInput input:disabled {
+	color: #d1d1d1;
+	background-color: #f6f6f6;
+}
+
+.field_icon_close,
+.field_icon_open {
+	width: 16px;
+	height: 16px;
+	position: relative;
+	float: right;
+	margin-right: 12px;
+	margin-top: -28px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.field_icon_close {
+	background-image: url('../../../assets/images/close_eye_rounded.svg');
+}
+
+.field_icon_open {
+	background-image: url('../../../assets/images/eye_rounded.svg');
+}
+
+input:invalid[data-focused='true']{
+	border: 0.5px solid #ff768e;
+}
+
+input:invalid[data-focused='true'] ~ .error_message,
+.error_message_show {
+	margin-top: 5px;
+	font-size: 12px;
+	color: #ff768e;
+}
+
+input:valid ~ .error_message,
+input:invalid[data-focused='false'] ~ .error_message,
+.error_message_disable {
+	display: none;
+}

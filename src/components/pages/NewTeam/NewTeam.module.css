@@ -1,0 +1,51 @@
+@media (min-width: 0px) {
+
+	.inputs{
+		width: calc(100vw - 25px);
+	}
+
+	.container form {
+		width: 100vw;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+}
+
+@media (min-width: 768px) {
+	.container form {
+		width: 90%;
+		flex-direction: row;
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+
+	.inputs {
+		width: 35%;
+	}
+}
+
+.container form {
+	background-color: #fff;
+	display: flex;
+	justify-content: space-evenly;
+	padding: 10px 15px 25px 15px;
+}
+
+.buttons {
+	display: flex;
+	justify-content: space-between;
+}
+
+.buttons button {
+	width: 45%;
+}
+
+@keyframes reveal {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}

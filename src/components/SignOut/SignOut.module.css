@@ -1,0 +1,18 @@
+.signout label {
+	cursor: pointer;
+}
+
+.signout p {
+	font-size: 14px;
+	line-height: 18px;
+	color: #ff768e;
+}
+
+.logo {
+	width: 22px;
+	height: 18px;
+	margin: 10px 5px 10px 10px;
+	background-image: url('../../assets/images/signout.svg');
+	background-repeat: no-repeat;
+	background-size: contain;
+}

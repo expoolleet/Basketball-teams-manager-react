@@ -1,0 +1,300 @@
+:root{
+	--mobile_overflow: auto;
+}
+
+@media (min-width: 0px) {
+	.navbar {
+		top: 0;
+		position: fixed;
+		z-index: 2;
+		padding-top: 0px;
+	}
+
+	html {
+		overflow: var(--mobile_overflow);
+	}
+
+	body {
+		padding-top: var(--body_mobile_padding_top);
+	}
+
+	.header {
+		justify-content: center;
+	}
+
+	.menu,
+	.profile {
+		display: none;
+	}
+
+	.show {
+		display: flex;
+	}
+
+	.profile {
+		position: absolute;
+		flex-direction: row-reverse;
+		justify-content: center;
+		left: 0px;
+		top: 110px;
+		width: 200px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid #d1d1d1;
+		animation: reveal 0.3s;
+	}
+
+	.name {
+		padding: 0 10px;
+	}
+
+	.menu {
+		width: 100vw;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	.menu ul {
+		padding-top: 100px;
+		width: 200px;
+		animation: reveal 0.3s;
+	}
+
+	.menu ul li {
+		padding: 25px 80px 5px 0;
+	}
+
+	.menu ul li a,
+	.signout label {
+		display: flex;
+		align-items: center;
+	}
+
+	.menu ul li p {
+		margin-left: 5px;
+	}
+
+	.signout {
+		margin-left: 15px;
+	}
+
+	.ham_menu {
+		display: block;
+		position: absolute;
+		left: 15px;
+		width: 24px;
+		height: 24px;
+		margin-top: 28px;
+		background-image: url('../../assets/images/mobile_menu.svg');
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+	.ham_menu:active{
+		animation: jump 0.3s;
+	}
+
+	.icon {
+		position: relative;
+		display: block;
+		width: 40px;
+		height: 40px;
+	}
+}
+
+@media (min-width: 768px) {
+
+	html {
+		overflow: hidden;
+	}
+
+	body {
+		padding-top: 0px !important;
+	}
+
+	.navbar{
+		position: relative;
+	}
+
+	.header {
+		justify-content: space-between;
+		box-shadow: 0px 1px 10px 0px #d1d1d180;
+	}
+
+	.ham_menu {
+		display: none;
+	}
+
+	.menu {
+		display: block;
+		width: 140px;
+	}
+
+	.menu ul {
+		padding-top: 5px;
+		width: 140px;
+		animation: none;
+	}
+
+	.menu ul li {
+		animation: reveal 0.3s;
+		padding: 25px 10px 25px 0;
+	}
+
+	.menu ul li:last-child {
+		padding: 0;
+	}
+
+	.menu ul li a {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.signout{
+		margin-right: 20px;
+	}
+
+	.signout label {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.icon {
+		display: block;
+		width: 36px;
+		height: 36px;
+		margin-right: 4vw;
+	}
+
+	.profile {
+		position: relative;
+		display: flex;
+		border: none;
+		top: 0;
+		padding: 0;
+		flex-direction: row;
+		justify-content: space-evenly;
+	}
+}
+
+.icon {
+	background-image: url('../../assets/images/profile.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.menu {
+	height: 100vh;
+	position: absolute;
+	z-index: 1;
+}
+
+.menu ul {
+	height: calc(100vh - 80px);
+	background-color: #fff;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.menu ul li {
+	display: block;
+}
+
+.signout {
+	position: fixed;
+	margin-bottom: 20px;
+	bottom: 0;
+}
+
+.teams,
+.players {
+	text-decoration: none;
+	color: #9c9c9c;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.current_players,
+.current_teams {
+	text-decoration: none;
+	color: #e4163a;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.currentPage {
+	background-color: #e4163a;
+}
+
+.teams_icon,
+.players_icon {
+	margin-left: 6px;
+	width: 24px;
+	height: 24px;
+	background-color: #9c9c9c;
+	mask-repeat: no-repeat;
+	mask-size: contain;
+}
+
+.teams_icon {
+	mask-image: url('../../assets/images/group_person_rounded.svg');
+}
+
+.players_icon {
+	mask-image: url('../../assets/images/person_rounded.svg');
+}
+
+.header {
+	width: 100vw;
+	height: 80px;
+	background-color: #fff;
+	display: flex;
+	position: relative;
+	z-index: 2;
+}
+
+.logo {
+	display: block;
+	width: 191px;
+	height: 48px;
+	margin-top: 15px;
+	margin-left: 4vw;
+	background-image: url('../../assets/images/logo.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.profile {
+	align-items: center;
+}
+
+.name {
+	display: block;
+	position: relative;
+	text-decoration: none;
+	color: #303030;
+	line-height: 24px;
+	font-size: 16px;
+	z-index: 1;
+}
+
+@keyframes reveal {
+	from {
+		opacity: 0;
+		transform: translateX(-100px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+@keyframes jump {
+	from {
+		transform: scale(0.8)
+	}
+	to{
+		transform: scale(1);
+	}
+}

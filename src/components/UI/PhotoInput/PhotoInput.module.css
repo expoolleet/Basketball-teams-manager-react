@@ -1,0 +1,36 @@
+@media (min-width: 0) {
+	.photo_input{
+		height: 20vh;
+		width: 50vw;
+		margin: 20px 0 40px 0;
+	}
+}
+
+
+
+@media (min-width: 768px) {
+	.photo_input{
+		width: 25vw;
+		height: 25vh;
+	}
+}
+
+.photo_input {
+	background-color: #d1d1d1;
+	border-radius: 10px;
+	background-image: url('../../../assets/images/add_a_photo.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 20%;
+	cursor: pointer;
+	transition: background-color 0.15s ease-in-out;
+	animation: reveal 0.3s;
+}
+
+.photo_input:hover {
+	background-color: #888;
+}
+
+.photo_input input {
+	display: none;
+}

@@ -1,0 +1,16 @@
+@media (min-width: 0px) {
+	.signin {
+		padding: calc(50svh - 300px) 7svw;
+		width: calc(60svw + 140px);
+	}
+}
+
+@media (min-width: 768px) {
+	.signin {
+		width: calc(30svw + 140px);
+	}
+
+	.background {
+		background-image: url('../../../assets/images/signin_background.svg');
+	}
+}

@@ -1,0 +1,47 @@
+:root{
+	--body_mobile_padding_top: 0;
+}
+
+@media (min-width: 0px) {
+	.form_title {
+		text-align: center;
+	}
+
+	body{
+        padding-top: var(--body_mobile_padding_top);
+    }
+}
+
+@media (min-width: 768px) {
+	.background {
+		width: 65svw;
+		height: 100svh;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-color: #f5fbff;
+	}
+	.form_title {
+		text-align: left;
+	}
+}
+
+.container {
+	background-color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100svh;
+}
+
+.form_title {
+	color: #344472;
+	font-size: 36px;
+	font-family: 'Avenir Book';
+	padding-bottom: 30px;
+}
+
+.form_footer {
+	font-size: 14px;
+	color: #707070;
+	text-align: center;
+}

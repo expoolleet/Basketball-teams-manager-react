@@ -1,0 +1,49 @@
+@media (min-width: 0px) {
+	.error_notification, .success_notification {
+		position: fixed;
+		text-wrap: pretty;
+		padding: 20px 20px;
+		margin-left: 30%;
+		right: 15px;
+		top: 20px;
+		/* top: 35svh; */
+		/* right: 30vw; */
+	}
+}
+
+@media (min-width: 768px) {
+	.error_notification, .success_notification {
+		display: block;
+		text-wrap: nowrap;
+		padding: 10px 20px;
+		right: 36px;
+		top: 20px;
+	}
+}
+
+.error_notification, .success_notification {
+	position: absolute;
+	color: #ffffff;
+	border-radius: 4px;
+	z-index: 99;
+}
+
+.error_notification {
+	background-color: #ff5761;
+}
+
+.success_notification{
+	background-color: #3ddf52;
+}
+
+@keyframes slidein {
+	from {
+		transform: translateY(-10px) scale(0.9);
+	}
+	50% {
+		transform: translateY(5px) scale(1.05);
+	}
+	to {
+		transform: translateY(0px) scale(1);
+	}
+}

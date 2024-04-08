@@ -1,0 +1,15 @@
+@media (min-width: 0) {
+	.signup {
+		padding: calc(50svh - 300px) 7svw;
+		width: calc(60svw + 140px);
+	}
+}
+
+@media (min-width: 768px) {
+	.background {
+		background-image: url('../../../assets/images/signup_background.svg');
+	}
+	.signup {
+		width: calc(30svw + 140px);
+	}
+}

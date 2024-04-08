@@ -1,0 +1,28 @@
+.button {
+	height: 40px;
+	width: 100%;
+	margin: 20px 0;
+	background-color: #e4163a;
+	border-radius: 4px;
+	border: none;
+	color: #ffffff;
+	font-weight: 500;
+	font-style: normal;
+	font-size: 16px;
+	cursor: pointer;
+	font-family: 'Avenir Book';
+}
+
+.button:hover {
+	background-color: #ff5761;
+	transition: all 0.15s ease-in-out;
+}
+
+.button:active {
+	background-color: #c60e2e;
+}
+
+.button:disabled {
+	color: #d1d1d1;
+	background-color: #f6f6f6;
+}

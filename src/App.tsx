@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import './App.css'
+import { BrowserRouter } from 'react-router-dom'
+import Navbar from './components/Navbar/Navbar'
+import { AuthContext } from './components/context/AuthContext'
+import PageLoader from './components/UI/PageLoader/PageLoader'
+import PrivateRouter from './components/PrivateRouter/PrivateRouter'
+import PublicRouter from './components/PublicRouter/PublicRouter'
+function App(): JSX.Element {
+	const [isAuth, setIsAuth] = useState<boolean>(false)
+	const [isLoading, setIsLoading] = useState<boolean>(true)
+	const [authName, setAuthName] = useState<string>('')
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	useEffect(() => {
+		if (localStorage.getItem('auth')) {
+			setIsAuth(true)
+			const lastLogin = localStorage.getItem('lastLogin')
+			setAuthName(localStorage.getItem(`${lastLogin}.name`) as string)
+		}
+		setIsLoading(false)
+	}, [])
+
+	useEffect(() => {
+		document.documentElement.style.setProperty('--body_mobile_padding_top', isAuth ? '80px' : '0')
+	}, [isAuth])
+
+	if (isLoading) {
+		return <PageLoader />
+	}
+
+	return (
+		<AuthContext.Provider
+			value={{
+				isAuth,
+				setIsAuth,
+				authName,
+				setAuthName,
+			}}>
+			<BrowserRouter>
+				{isAuth ? [<Navbar key={'Navbar'} />, <PrivateRouter key={'PrivateRouter'} />] : <PublicRouter />}
+			</BrowserRouter>
+		</AuthContext.Provider>
+	)
 }
 
-export default App;
+export default App

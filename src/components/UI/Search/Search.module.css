@@ -1,0 +1,67 @@
+/* @media (min-width: 220px) {
+	.search {
+		width: 190px;
+	}
+}
+
+@media (min-width: 320px) {
+	.search {
+		width: 285px;
+	}
+}
+
+@media (min-width: 400px) {
+	.search {
+		width: 327px;
+	}
+} */
+
+@media (min-width: 768px) {
+	.search {
+		max-width: 364px;
+	}
+}
+.container {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.search {
+	letter-spacing: 0.02em;
+	border: 0.5px solid #d1d1d1;
+	background-color: #fff;
+	border-radius: 4px;
+	height: 40px;
+	padding-left: 15px;
+	font-family: 'Avenir Regular';
+	font-size: 14px;
+	line-height: 24px;
+}
+
+.search_icon {
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	right: 15px;
+	opacity: 0.7;
+	background-image: url('../../../assets/images/search_rounded.svg');
+}
+
+.search:hover {
+	background-color: #e7e7e7;
+}
+
+.search:focus {
+	box-shadow: 0 0 5px #d9d9d9;
+	caret-color: rgba(0, 0, 0, 0.35);
+}
+
+.search:focus {
+	outline: none;
+}
+
+.search:disabled {
+	color: #d1d1d1;
+	background-color: #f6f6f6;
+}

@@ -1,0 +1,133 @@
+@media (min-width: 0px) {
+	.logo {
+		margin: 40px 0;
+        height: 140px;
+	}
+
+	.team {
+		width: 100%;
+		height: 90svh;
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.figcaption {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.figcaption span {
+		font-size: 16px;
+	}
+
+	.figcaption h3 {
+		font-size: 18px;
+	}
+
+	.figcaption * {
+		margin-bottom: 60px;
+	}
+
+	.figcaption *:last-child {
+		margin-top: 0px;
+	}
+}
+
+@media (min-width: 768px) {
+	.selected_team {
+		width: calc(100vw - 140px);
+		height: calc(100vh - 80px);
+		margin-left: 140px;
+	}
+
+	.team {
+		width: 90%;
+		height: 40vh;
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+		flex-direction: row;
+		text-align: left;
+	}
+
+	.logo {
+		height: 180px;
+        /* height: auto; */
+	}
+
+	.figcaption {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, 1fr);
+		grid-template-rows: repeat(auto-fit, 1fr);
+		row-gap: 40px;
+		column-gap: 5px;
+	}
+
+	.figcaption span {
+		font-size: 18px;
+	}
+
+	.figcaption h3 {
+		font-size: 24px;
+	}
+
+    .figcaption * {
+		margin-bottom: 0px;
+	}
+
+	.name {
+		font-size: 36px;
+		grid-area: 1 / 1 / 2 / 4;
+	}
+
+	.year {
+		grid-area: 2 / 1 / 3 / 2;
+	}
+
+	.division {
+		grid-area: 2 / 2 / 3 / 4;
+		margin-left: 120px;
+        margin-right: 25px;
+	}
+
+	.conference {
+		grid-area: 3 / 1 / 4 / 2;
+	}
+    
+}
+
+.team {
+	background-image: linear-gradient(121.57deg, #707070 1.62%, #393939 81.02%);
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	color: #fff;
+}
+
+.logo {
+	object-fit: contain;
+	padding: 0 30px;
+}
+
+.figcaption span {
+	font-family: 'Avenir Book';
+	font-weight: 400;
+}
+
+.edit,
+.remove {
+	width: 24px;
+	height: 24px;
+	padding: 0 20px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	cursor: pointer;
+}
+
+.edit {
+	background-image: url('../../../assets/images/create.svg');
+}
+
+.remove {
+	background-image: url('../../../assets/images/delete.svg');
+}
