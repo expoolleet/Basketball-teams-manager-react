@@ -1,15 +1,14 @@
 @media (min-width: 200px) {
-	.items{
+	.items {
 		left: -15px;
 	}
 }
 
 @media (min-width: 768px) {
-	.items{
+	.items {
 		left: -70px;
 	}
 }
-
 
 :root {
 	--height: 40px;
@@ -57,7 +56,13 @@
 }
 
 .item:hover {
-	background-color: #e7e7e7;
+	background-color: #ff768e;
+	color: #fff;
+}
+
+.item:active{
+	color: #fff;
+	background-color: #C60E2E;
 }
 
 .items:last-child {

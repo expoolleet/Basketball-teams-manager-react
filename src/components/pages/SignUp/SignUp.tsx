@@ -21,11 +21,11 @@ interface ISignUpValues {
 const timeoutMS: number = 3000
 
 export default function SignUp(): JSX.Element {
-	const [isCheckBox, setIsCheckBox] = useState<boolean>(false)
 	const [isSignupError, setIsSignupError] = useState<boolean>(false)
 	const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
 	const [errorMessage, setErrorMessage] = useState<string>('')
-
+	const [isChecked, setIsChecked] = useState<boolean>(false)
+	const [isCheckBoxError, setIsCheckBoxError] = useState<boolean>(false)
 	// Подключение к контексту AuthContext
 	const { setIsAuth, setAuthName } = useContext(AuthContext)
 
@@ -43,28 +43,28 @@ export default function SignUp(): JSX.Element {
 			type: 'text',
 			name: 'name',
 			label: 'Name',
-			errorMessage: 'Name should be 3-16 characters without any special symbol',
+			errorMessage: 'Name should be 3-16 characters without any special symbol.',
 			pattern: `^[A-Za-z0-9 ]{3,16}$`,
 		},
 		{
 			type: 'text',
 			name: 'login',
 			label: 'Login',
-			errorMessage: 'Login should be 3-16 characters without any special symbol',
+			errorMessage: 'Login should be 3-16 characters without any special symbol.',
 			pattern: `^[A-Za-z0-9]{3,16}$`,
 		},
 		{
 			type: 'password',
 			name: 'password',
 			label: 'Password',
-			errorMessage: 'Password should be 8 characters at least',
+			errorMessage: 'Password should be 8 characters at least.',
 			pattern: `[A-Za-z0-9]{8,99}$`,
 		},
 		{
 			type: 'password',
 			name: 'confirmPassword',
 			label: 'Enter your password again',
-			errorMessage: "Passwords don't match",
+			errorMessage: "Passwords don't match.",
 			pattern: values.password,
 		},
 	]
@@ -86,10 +86,10 @@ export default function SignUp(): JSX.Element {
 			return
 		}
 
-		if (!isCheckBox) {
+		if (!isChecked) {
 			if (isSignupError) return
 
-			sendError('You need to accept the agreement')
+			setIsCheckBoxError(true)
 			return
 		}
 
@@ -119,11 +119,6 @@ export default function SignUp(): JSX.Element {
 		setValues({ ...values, [event.target.name]: event.target.value })
 	}
 
-	// Функция для переключения состояния чекбокса
-	function getCheckBox(): void {
-		setIsCheckBox(!isCheckBox)
-	}
-
 	return (
 		<div className={shared.container}>
 			<div className={classes.signup}>
@@ -139,7 +134,7 @@ export default function SignUp(): JSX.Element {
 							onChange={onChangeInput}
 						/>
 					))}
-					<MyCheckbox onClick={getCheckBox}>
+					<MyCheckbox isChecked={isChecked} setIsChecked={setIsChecked} isErrorMessageForced={isCheckBoxError}  errorMessage='You must be accept the agreement.'>
 						I accept the agreement
 					</MyCheckbox>
 					<MyButton isButtonDisabled={isButtonDisabled}>Sign Up</MyButton>
