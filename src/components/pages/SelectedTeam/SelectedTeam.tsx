@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classes from './SelectedTeam.module.css'
 import shared from '../../shared/AdditionalPages.module.css'
 import { Link } from 'react-router-dom'
 import { ITeam } from '../Teams/Teams'
+import Modal from '../../Modal/Modal'
+import MyButton from '../../UI/MyButton/MyButton'
+
+interface ISelectedTeamProps {
+	editTeam(team: ITeam): any
+	deleteTeam(team: ITeam): any
+	selectedTeam: ITeam
+}
 
 export default function SelectedTeam(props: any) {
 	const { logo, division, conference, name, year }: ITeam = props.selectedTeam
+	const { editTeam, deleteTeam, selectedTeam }: ISelectedTeamProps = props
+
+	const [modal, setModal] = useState<boolean>(false)
+
+	function handleDeleteTeamWindow(): void {
+		setModal(!modal)
+	}
 
 	return (
 		<div className={shared.container}>
@@ -17,13 +32,13 @@ export default function SelectedTeam(props: any) {
 					<span>{name}</span>
 				</div>
 				<div className={classes.header_buttons}>
-					<span className={classes.edit} onClick={() => props.editTeam(props.selectedTeam)} />{' '}
 					<span
-						className={classes.remove}
+						className={classes.edit}
 						onClick={() => {
-							props.deleteTeam(props.selectedTeam)
+							editTeam(selectedTeam)
 						}}
-					/>
+					/>{' '}
+					<span className={classes.remove} onClick={handleDeleteTeamWindow} />
 				</div>
 			</div>
 			<figure className={classes.team}>
@@ -47,6 +62,18 @@ export default function SelectedTeam(props: any) {
 					</h3>
 				</figcaption>
 			</figure>
+
+			<Modal visible={modal} setVisible={setModal} header='Do you want to delete the team?'>
+				<MyButton styleType='gray' onClick={handleDeleteTeamWindow}>
+					Cancel
+				</MyButton>
+				<MyButton
+					onClick={() => {
+						deleteTeam(selectedTeam)
+					}}>
+					Proceed
+				</MyButton>
+			</Modal>
 		</div>
 	)
 }

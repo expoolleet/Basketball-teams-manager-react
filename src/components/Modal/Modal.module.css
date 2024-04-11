@@ -1,0 +1,51 @@
+.modal_container{
+	position: absolute;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal{
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 10px;
+	background-color: #fff;
+	animation: reveal 0.1s ease-in-out;
+}
+
+.modal_container.active{
+	display: flex;
+}
+
+.modal_head{
+	padding: 16px 16px;
+	text-align: center;
+	color: #707070;
+	font-family: 'Avenir Book';
+	font-weight: 400;
+	border-radius: 10px;
+}
+
+.modal_body{
+	display: flex;
+	justify-content: space-evenly;
+	width: 85%;
+}
+
+.modal_body button{
+	width: 40%;
+}
+
+@keyframes reveal {
+	from {
+		opacity: 0.5;
+	}
+	to {
+		opacity: 1;
+	}
+}

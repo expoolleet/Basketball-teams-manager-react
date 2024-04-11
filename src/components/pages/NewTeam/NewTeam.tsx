@@ -238,15 +238,11 @@ export default function NewTeam(props: any) {
 					))}
 					<div className={classes.buttons}>
 						<MyButton
-							style={{
-								backgroundColor: '#fff',
-								color: '#9c9c9c',
-								border: '2px solid #c9c9c9',
-							}}
 							onClick={() => {
 								navigate('/')
 							}}
-							type='button'>
+							type='button'
+							styleType='gray'>
 							Cancel
 						</MyButton>
 						<MyButton>Save</MyButton>
