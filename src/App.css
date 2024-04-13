@@ -13,8 +13,14 @@
 	src: url('assets/fonts/Avenir\ Black.ttf');
 }
 
+:root {
+	--item_height: 40px;
+	--itemsCount: 1;
+	--mobile_overflow: auto;
+}
+
 * {
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0.15); /* mobile touch highlights */
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); /* mobile touch highlights */
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import classes from './Players.module.css'
 import Search from '../../UI/Search/Search'
 import AddButton from '../../UI/AddButton/AddButton'
@@ -7,9 +7,9 @@ import Pagination from '../../Pagination/Pagination'
 import Selector from '../../UI/Selector/Selector'
 import PlayerCard from '../../PlayerCard/PlayerCard'
 import shared from '../../shared/MainPages.module.css'
+import MultiSelector from '../../UI/MultiSelect/MultiSelector'
 
-
-export interface IPlayer{
+export interface IPlayer {
 	photo: string
 	name: string
 	position: string
@@ -28,6 +28,8 @@ const NEW_PLAYER_STATE: string = 'newteam'
 
 const itemsPerPage: number[] = [6, 12, 24]
 
+const positions: string[] = ['Center Forward', 'Guard Forward', 'Forward', 'Center', 'Guard']
+
 export default function Players(): JSX.Element {
 	const navigate = useNavigate()
 
@@ -39,6 +41,7 @@ export default function Players(): JSX.Element {
 	const [totalPages, setTotalPages] = useState<number>(0)
 	const [currentPage, setCurrentPage] = useState<number>(0)
 	const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0])
+	const [selectedPositions, setSelectedPositions] = useState<string[]>([])
 	const [itemOffset, setItemOffset] = useState<number>(0)
 	const [selectedPlayer, setSelectedPlayer] = useState<IPlayer>({
 		photo: '',
@@ -48,14 +51,11 @@ export default function Players(): JSX.Element {
 		height_cm: 0,
 		weight_kg: 0,
 		birthday: new Date(),
-		number: 0
+		number: 0,
 	})
 
-	function handleSearch(event: any) : void {
+	function handleSearch(event: any): void {}
 
-	}
-
-	
 	function calculateOffset(value: number) {
 		const newOffset = (value * currentAmountOfItemsPerPage) % playersCount
 		setItemOffset(newOffset)
@@ -77,12 +77,16 @@ export default function Players(): JSX.Element {
 		})
 	}
 
-	function handleSelectorItemsChange(item: any): void {
+	function handleItemsPerPageChange(item: any): void {
 		if (Number(item) === currentAmountOfItemsPerPage) return
 
 		setCurrentPage(0)
 		setItemOffset(0)
 		setCurrentAmountOfItemsPerPage(Number(item))
+	}
+
+	function handlePositionsChange(item: any): void {
+		setSelectedPositions([...selectedPositions, item])
 	}
 
 	const searchInput = {
@@ -94,6 +98,12 @@ export default function Players(): JSX.Element {
 		<div className={shared.container}>
 			<div className={shared.header}>
 				<Search {...searchInput} onChange={handleSearch} value={filter} />
+				<MultiSelector
+					items={positions}
+					selectedItems={selectedPositions}
+					setSelectedPositions={setSelectedPositions}
+					onChahgedSelectorItems={handlePositionsChange}
+				/>
 				<AddButton
 					onClick={() => {
 						navigate('/players')
@@ -127,17 +137,16 @@ export default function Players(): JSX.Element {
 				)}
 			</div>
 
-			<div className={classes.footer}>
+			<div className={shared.footer}>
 				<Pagination
 					totalPages={totalPages}
 					onPageChange={handlePaginationClick}
 					currentPage={currentPage}
 				/>
 				<Selector
-					totalItems={totalPages}
 					items={itemsPerPage}
 					selectedItem={currentAmountOfItemsPerPage}
-					onChahgedSelectorItems={handleSelectorItemsChange}
+					onChahgedSelectorItems={handleItemsPerPageChange}
 				/>
 			</div>
 		</div>

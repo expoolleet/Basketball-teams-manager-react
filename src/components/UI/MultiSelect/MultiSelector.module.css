@@ -1,0 +1,206 @@
+@media (min-width: 0px) {
+	.container {
+		margin-top: 15px;
+	}
+}
+
+@media (min-width: 768px) {
+	.container {
+		margin-top: 0;
+		margin: 0 20px;
+		max-width: 364px;
+		min-width: 130px;
+	}
+
+	.items {
+		max-width: 364px;
+		min-width: 130px;
+	}
+}
+
+.container {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+.multiselector {
+	border: 1px solid #d1d1d1;
+	background-color: #fff;
+	padding: 8px 12px;
+}
+
+.multiselector,
+.multiselector_active {
+	width: 100%;
+	height: 40px;
+	border-radius: 4px;
+	font-size: 14px;
+	font-family: 'Avenir Regular';
+	outline: none;
+	cursor: pointer;
+	position: relative;
+	font-size: 14px;
+	color: #707070;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.multiselector_active {
+	padding: 6px 12px;
+	border: 1px solid #d1d1d1;
+}
+
+.multiselector::after,
+.multiselector_active::after {
+	content: '';
+	position: absolute;
+	height: 24px;
+	border-left: 1px solid #d1d1d1;
+	top: 8px;
+	right: 32px;
+}
+
+.items {
+	width: 100%;
+	position: absolute;
+	top: calc(var(--item_height) + 4px);
+	border-radius: 4px;
+	border: 1px solid #d1d1d1;
+	background-color: #fff;
+	font-size: 14px;
+}
+
+.items_hide,
+.item_hide {
+	display: none;
+}
+
+.item {
+	display: block;
+	height: 40px;
+	border-bottom: 1px solid #d1d1d1;
+	padding-left: 10px;
+	padding-top: 8px;
+	color: #9c9c9c;
+}
+
+.item:hover.item:first-child,
+.item:active.item:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.item:hover.item:last-child,
+.item:active.item:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.item:hover {
+	color: #fff;
+	background-color: #ff768e;
+}
+
+.item:active {
+	color: #fff;
+	background-color: #c60e2e;
+}
+
+.item:last-child {
+	border-bottom: none;
+}
+
+.selected_item {
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 2px 5px;
+	margin-right: 5px;
+	background-color: #e4163a;
+	color: #fff;
+	border-radius: 4px;
+	font-family: 'Avenir Book';
+	font-weight: 400;
+	text-wrap: nowrap;
+	position: relative;
+	cursor: default;
+	animation: reveal 0.1s;
+}
+
+.remove_selected_item_icon {
+	display: block;
+	width: 14px;
+	height: 14px;
+	margin-left: 10px;
+	background-image: url('../../../assets/images/close.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	cursor: pointer;
+}
+
+.remove_items_icon {
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	top: 12px;
+	right: 44px;
+	background-image: url('../../../assets/images/close.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	cursor: pointer;
+	filter: invert(20%);
+}
+
+.arrow {
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	top: 12px;
+	right: 9px;
+	background-image: url('../../../assets/images/expand_arrow_small.svg');
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+.arrow_animation_up {
+	animation: rotateUp 0.2s;
+	animation-fill-mode: forwards;
+}
+
+.arrow_animation_down {
+	animation: rotateDown 0.2s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes rotateDown {
+	from {
+		transform: rotate(180deg);
+	}
+	to {
+		transform: rotate(0deg);
+	}
+}
+
+@keyframes rotateUp {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(180deg);
+	}
+}
+
+@keyframes reveal {
+	from {
+		opacity: 0.5;
+	}
+	to {
+		opacity: 1;
+	}
+}
