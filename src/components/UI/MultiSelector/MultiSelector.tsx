@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import classes from './MultiSelector.module.css'
 import useRefDimensions from '../../../hooks/useRefDimensions'
 
@@ -22,21 +22,21 @@ export default function MultiSelector(props: any) {
 	const { dimensions, dimensionsRef } = useRefDimensions<HTMLSpanElement>()
 
 	useEffect(() => {
-		document.documentElement.style.setProperty('--itemsCount', `${items.length}`) // отслеживаем длину элементов, передаваемых селектору
-
 		if (selectedItems.length === 0)
+			// сброс цвета заднего фона у селектора при отсутствии выбранных фильтров
 			setMultiSelectorStyle({
 				backgroundColor: '#fff',
 			})
 		// изменение цвет фона на #fff в случае, если отсутствуют выбранные элементы в селекторе
 		else setMultiSelectorStyle({ backgroundColor: '#f6f6f6' }) // изменение цвет фона на #f6f6f6 в случае, если есть элементы в селекторе
-	}, [items.length, selectedItems.length])
+	}, [selectedItems.length])
 
 	let remove_items_icon: string = classes.remove_items_icon
 	let multiSelector: string = classes.multiselector_active
 	let placeholder: string = ''
 
 	if (selectedItems.length === 0) {
+		// настройки селектора по умолчанию
 		remove_items_icon = ''
 		multiSelector = classes.multiselector
 		placeholder = 'Select...'
@@ -49,6 +49,7 @@ export default function MultiSelector(props: any) {
 	}
 
 	function hideSelector(): void {
+		// скрытие селектора
 		setTimeout(() => {
 			setItemsClass(classes.items_hide)
 			setItemClass(classes.item_hide)
@@ -56,6 +57,7 @@ export default function MultiSelector(props: any) {
 	}
 
 	function onClickSelect(): void {
+		// обработчик при нажатия на селектор
 		if (areItemsHiden) {
 			setMultiSelectorStyle({ backgroundColor: '#fff' })
 			setItemsClass(classes.items)
@@ -70,25 +72,29 @@ export default function MultiSelector(props: any) {
 	}
 
 	function onClickItem(event: any): void {
+		// добавление фильтра
 		const item = event.target.innerText as string
 		onChahgedSelectorItems(item)
 		onClickSelect()
 	}
 
 	function removeSelectedItem(item: string): void {
+		// удаление выбранного фильтра
 		setSelectedPositions(selectedItems.filter((i) => i !== item))
 	}
 
 	function removeItems(): void {
+		// удаление всех фильтров
 		setSelectedPositions([])
 	}
 
-	const itemsToRender: string[] = []
+	const itemsToRender: string[] = [] // фильтры селектора, которые будут выводиться (в зависимости от длины элемента)
 	const offset: number = 110
 	const letterWidth: number = 10
 	let width: number = 0
 
 	for (let i = 0; i < selectedItems.length; i++) {
+		// в зависимости от ширины селектора, отрисовается определенное количество выбранных фильтры
 		width += selectedItems[i].length * letterWidth
 		if (width < dimensions.width - offset) itemsToRender.push(selectedItems[i])
 		else {
