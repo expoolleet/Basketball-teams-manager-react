@@ -1,27 +1,16 @@
-/* @media (min-width: 220px) {
-	.search {
-		width: 190px;
-	}
-}
-
-@media (min-width: 320px) {
-	.search {
-		width: 285px;
-	}
-}
-
-@media (min-width: 400px) {
-	.search {
-		width: 327px;
-	}
-} */
-
 @media (min-width: 768px) {
 	.search {
 		max-width: 364px;
+		min-width: 130px;
+	}
+
+	.container {
+		max-width: 364px;
+		min-width: 130px;
 	}
 }
 .container {
+	width: 100%;
 	display: flex;
 	align-items: center;
 	position: relative;
@@ -33,7 +22,7 @@
 	background-color: #fff;
 	border-radius: 4px;
 	height: 40px;
-	padding-left: 15px;
+	padding-left: 12px;
 	font-family: 'Avenir Regular';
 	font-size: 14px;
 	line-height: 24px;

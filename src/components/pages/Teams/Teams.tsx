@@ -230,7 +230,6 @@ export default function Teams(): JSX.Element {
 								currentPage={currentPage}
 							/>
 							<Selector
-								totalItems={totalPages}
 								items={itemsPerPage}
 								selectedItem={currentAmountOfItemsPerPage}
 								onChahgedSelectorItems={handleSelectorItemsChange}

@@ -3,7 +3,7 @@ import classes from './Selector.module.css'
 
 interface ISelectorProps {
 	items: number[]
-	selectedItem: number
+	selectedItem: number | string
 	totalItems: number
 	onChahgedSelectorItems(item: number): any
 }
@@ -11,11 +11,11 @@ interface ISelectorProps {
 const delayMS: number = 200
 
 export default function Selector(props: any) {
-	const { items, totalItems, selectedItem, onChahgedSelectorItems } = props as ISelectorProps
+	const { items, selectedItem, onChahgedSelectorItems } = props as ISelectorProps
 
 	const [itemsClass, setItemsClass] = useState<string>(classes.items_hide)
 	const [itemClass, setItemClass] = useState<string>(classes.item_hide)
-	const [AreItemsHiden, setIsItemsHiden] = useState<boolean>(true)
+	const [areItemsHiden, setAreItemsHiden] = useState<boolean>(true)
 	const [arrowAnimClass, setArrowAnimClass] = useState<string>('')
 
 	useEffect(() => {
@@ -23,9 +23,9 @@ export default function Selector(props: any) {
 	}, [items.length])
 
 	const opacityAnimation: any = {
-		opacity: AreItemsHiden ? '0' : '1',
+		opacity: areItemsHiden ? '0' : '1',
 		transition: `opacity ${delayMS}ms`,
-		cursor: AreItemsHiden ? 'default' : 'pointer',
+		cursor: areItemsHiden ? 'default' : 'pointer',
 	}
 
 	function hideSelector(): void {
@@ -36,7 +36,7 @@ export default function Selector(props: any) {
 	}
 
 	function onClickSelect(): void {
-		if (AreItemsHiden) {
+		if (areItemsHiden) {
 			setItemsClass(classes.items)
 			setItemClass(classes.item)
 			setArrowAnimClass(classes.arrow_animation_down)
@@ -44,20 +44,16 @@ export default function Selector(props: any) {
 			hideSelector()
 			setArrowAnimClass(classes.arrow_animation_up)
 		}
-		setIsItemsHiden(!AreItemsHiden)
+		setAreItemsHiden(!areItemsHiden)
 	}
 
 	function onClickItem(event: any): void {
 		const item = event.target.innerText as number
-		setIsItemsHiden(true)
+		setAreItemsHiden(true)
 		hideSelector()
 		setArrowAnimClass(classes.arrow_animation_up)
 
 		onChahgedSelectorItems(item)
-	}
-
-	if (totalItems === 0) {
-		return <></>
 	}
 
 	return (

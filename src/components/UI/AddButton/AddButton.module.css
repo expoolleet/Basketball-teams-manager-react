@@ -1,9 +1,11 @@
 .add_button {
+	min-width: 100px;
 	padding-right: 20px;
 	font-family: 'Avenir Regular';
 	font-size: 15px;
 	line-height: 24px;
 	position: relative;
+	z-index: -1;
 }
 
 .add_button::after {

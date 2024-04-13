@@ -1,7 +1,3 @@
-:root{
-	--mobile_overflow: auto;
-}
-
 @media (min-width: 0px) {
 	.navbar {
 		top: 0;
@@ -125,6 +121,7 @@
 
 	.name{
 		padding: 0px;
+		margin-right: 10px;
 	}
 
 	.menu {
@@ -165,7 +162,6 @@
 		display: block;
 		width: 36px;
 		height: 36px;
-		margin-right: 1.5vw;
 	}
 
 	.profile {
@@ -174,8 +170,9 @@
 		border: none;
 		top: 0;
 		padding: 0;
+		margin-right: 30px;
 		flex-direction: row;
-		justify-content: space-evenly;
+		justify-content: flex-end;
 	}
 }
 
