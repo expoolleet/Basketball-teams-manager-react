@@ -278,6 +278,7 @@
 	line-height: 24px;
 	font-size: 16px;
 	z-index: 1;
+	cursor: pointer;
 }
 
 @keyframes reveal {

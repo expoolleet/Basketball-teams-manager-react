@@ -7,7 +7,7 @@ import Pagination from '../../Pagination/Pagination'
 import Selector from '../../UI/Selector/Selector'
 import PlayerCard from '../../PlayerCard/PlayerCard'
 import shared from '../../shared/MainPages.module.css'
-import MultiSelector from '../../UI/MultiSelect/MultiSelector'
+import MultiSelector from '../../UI/MultiSelector/MultiSelector'
 
 export interface IPlayer {
 	photo: string

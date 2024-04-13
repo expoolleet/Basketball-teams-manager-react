@@ -70,6 +70,7 @@
 	border: 1px solid #d1d1d1;
 	background-color: #fff;
 	font-size: 14px;
+	z-index: 1;
 }
 
 .items_hide,
