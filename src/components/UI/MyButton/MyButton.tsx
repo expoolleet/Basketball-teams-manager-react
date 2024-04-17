@@ -1,24 +1,27 @@
-import classes from '../../shared/Button.module.css'
+import shared from '../../shared/Button.module.css'
 
 interface IButtonProps {
 	isButtonDisabled: boolean
-	styleType : string
+	styleType: string
 	buttonProps: any
 }
+
+const BUTTON_STYLE_GRAY: string = 'gray'
 
 export default function MyButton(props: any): JSX.Element {
 	const { isButtonDisabled, styleType, ...buttonProps } = props as IButtonProps
 
+	let buttonStyle: string
+	switch (styleType) {
+		case BUTTON_STYLE_GRAY:
+			buttonStyle = shared.gray_button
+			break
+		default:
+			buttonStyle = shared.button
+	}
+
 	return (
-		<button
-			disabled={isButtonDisabled}
-			{...buttonProps}
-			style={ styleType === 'gray' ? {
-				backgroundColor: '#fff',
-				color: '#9c9c9c',
-				border: '2px solid #c9c9c9',
-			} : {}}
-			className={classes.button}>
+		<button disabled={isButtonDisabled} {...buttonProps} className={buttonStyle}>
 			{props.children}
 		</button>
 	)

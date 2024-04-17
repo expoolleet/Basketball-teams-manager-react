@@ -1,6 +1,6 @@
 import { ITeam } from "../components/pages/Teams/Teams";
 
-export const teamsList : ITeam[] = [ // список команд для первичной загрузки команд (либо если прописать localStorage.clear())
+export const teamsList : ITeam[] = [ // список команд для первичной загрузки (либо если прописать localStorage.clear())
     {
         logo: '/portraits/portland.png',
         name: 'Portland trail blazers',

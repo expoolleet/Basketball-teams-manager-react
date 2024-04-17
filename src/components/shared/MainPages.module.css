@@ -108,7 +108,7 @@
 	align-items: center;
 }
 
-.background {
+.empty .background {
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
@@ -116,19 +116,19 @@
 	height: 320px;
 }
 
-.text {
+.empty .text {
 	text-align: center;
 	margin-bottom: 80px;
 }
 
-.text h1 {
+.empty .text h1 {
 	color: #ff768e;
 	font-family: 'Avenir Black';
 	font-size: 36px;
 	line-height: 50px;
 }
 
-.text h3 {
+.empty .text h3 {
 	color: #707070;
 	font-family: 'Avenir Book';
 	font-size: 24px;
@@ -145,7 +145,7 @@
 
 @keyframes reveal {
 	from {
-		opacity: 0;
+		opacity: 0.7;
 	}
 	to {
 		opacity: 1;

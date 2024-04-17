@@ -37,6 +37,8 @@ export default function SignUp(): JSX.Element {
 		confirmPassword: '',
 	})
 
+	
+
 	// Описание полей ввода для формы
 	const inputs = [
 		{

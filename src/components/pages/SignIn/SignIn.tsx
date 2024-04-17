@@ -6,6 +6,7 @@ import MyInput from '../../UI/MyInput/MyInput'
 import { Link } from 'react-router-dom'
 import Notification from '../../Notification/Notification'
 import { AuthContext } from '../../context/AuthContext'
+import { ErrorMessageType } from '../../UI/MyInput/MyInput'
 
 // Интерфейс для данных формы авторизации
 interface ISigninValues {
@@ -19,21 +20,25 @@ const timeoutMS: number = 3000 // Константа для таймаута у�
 export default function SignIn(): JSX.Element {
 	const { setIsAuth, setAuthName } = useContext(AuthContext)
 	const [isSigninError, setIsSigninError] = useState<boolean>(false)
-	const [isPasswordError, setIsPasswordError] = useState<boolean>(false)
 	const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
 	const [errorMessage, setErrorMessage] = useState<string>('')
 
-	 // useEffect для тестовой настройки localStorage
+	// useEffect для тестовой настройки localStorage
 	useEffect(() => {
 		localStorage.setItem('admin', 'admin')
 	}, [])
 
-	 // Состояние для хранения значений формы
+	// Состояние для хранения значений формы
 	const [values, setValues] = useState<ISigninValues>({
 		login: '',
 		password: '',
 	})
 
+	// Состояние насильной ошибки
+	const [forcedErrorMessage, setForcedErrorMessage] = useState<ErrorMessageType>({
+		name: '',
+		isError: false,
+	})
 
 	// Массив для описания полей ввода
 	const inputs = [
@@ -51,16 +56,16 @@ export default function SignIn(): JSX.Element {
 		},
 	]
 
-	 // Функция для отображения уведомления об ошибке
-	function sendError(error: string) : void {
+	// Функция для отображения уведомления об ошибке
+	function sendError(error: string): void {
 		setErrorMessage(error)
 		setIsSigninError(true)
-		setTimeout(() => {	
+		setTimeout(() => {
 			setIsSigninError(false)
 		}, timeoutMS)
 	}
 
-	 // Функция для обработки отправки формы
+	// Функция для обработки отправки формы
 	function submitForm(event: any): void {
 		event.preventDefault()
 
@@ -76,7 +81,7 @@ export default function SignIn(): JSX.Element {
 		if (localStorage.getItem(values.login) == null) {
 			sendError('User with the specified username / password was not found')
 		} else if (localStorage.getItem(values.login) !== values.password) {
-			setIsPasswordError(true)
+			setForcedErrorMessage({name: 'password', isError: true})
 		} else {
 			setIsAuth(true)
 			setAuthName(localStorage.getItem(`${values.login}.name`) as string)
@@ -94,15 +99,13 @@ export default function SignIn(): JSX.Element {
 		<div className={shared.container}>
 			<div className={classes.signin}>
 				<p className={shared.form_title}>Sign In</p>
-				<Notification isVisible={isSigninError}>
-					{errorMessage}
-				</Notification>
+				<Notification isVisible={isSigninError}>{errorMessage}</Notification>
 				<form noValidate autoComplete='off' action='' onSubmit={(event) => submitForm(event)}>
 					{inputs.map((input) => (
 						<MyInput
 							key={input.label}
 							{...input}
-							isErrorMessageForced={isPasswordError}
+							forcedErrorMessage={forcedErrorMessage}
 							errorMessage={input.errorMessage}
 							value={values[input.name]}
 							onChange={onChange}></MyInput>

@@ -1,56 +1,60 @@
 // Импорт необходимых компонентов и библиотек
-import React, { useContext, useEffect, useState } from 'react';
-import classes from './Navbar.module.css';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import SignOut from '../SignOut/SignOut';
-import { AuthContext } from '../context/AuthContext';
+import React, { useContext, useEffect, useState } from 'react'
+import classes from './Navbar.module.css'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import SignOut from '../SignOut/SignOut'
+import { AuthContext } from '../context/AuthContext'
 
 // Типы для стилизации ссылок и иконок
-type SelectedLink = { color: string };
-type SelectedIcon = { backgroundColor: string };
+type SelectedLink = { color: string }
+type SelectedIcon = { backgroundColor: string }
 
 // Функциональный компонент Navbar
 export default function Navbar(): JSX.Element {
-  // Получение информации о текущем URL-адресе и функции навигации
-  const location = useLocation();
-  const navigate = useNavigate();
+	// Получение информации о текущем URL-адресе и функции навигации
+	const location = useLocation()
+	const navigate = useNavigate()
 
-  // Состояние для управления видимостью меню на мобильных устройствах
-  const [isMenuHidden, setIsMenuHidden] = useState<boolean>(false);
-  const [showMobileMenu, setMobileMenu] = useState<string>('');
+	// Состояние для управления видимостью меню на мобильных устройствах
+	const [isMobileMenuOpened, setIsMobileMenuOpened] = useState<boolean>(false)
+	const [showMobileMenu, setMobileMenu] = useState<string>('')
 
-  // Управление видимостью мобильного меню и свойством overflow
-  useEffect(() => {
-    setMobileMenu(isMenuHidden ? classes.show : '');
-    document.documentElement.style.setProperty('--mobile_overflow', isMenuHidden ? 'hidden' : 'auto');
-  }, [isMenuHidden]); // Эффект запускается при изменении isMenuHidden
+	const show: string = classes.show
+	const hide: string = classes.hide
 
-  // Скрытие меню при изменении URL-адреса
-  useEffect(() => {
-    setIsMenuHidden(false);
-  }, [location]); // Эффект запускается при изменении location
+	// Управление видимостью мобильного меню и свойством overflow
+	useEffect(() => {
+		setMobileMenu(isMobileMenuOpened ? show : hide)
+		document.documentElement.style.setProperty('--mobile_overflow', isMobileMenuOpened ? 'hidden' : 'auto')	
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMobileMenuOpened]) // Эффект запускается при изменении isMenuHidden
 
-  // Массивы путей для команд и игроков
-  const forTeams = ['/', '/newteam'];
-  const forPlayers = ['/players', '/newplayer'];
+	// Скрытие меню при изменении URL-адреса
+	useEffect(() => {
+		setIsMobileMenuOpened(false)
+	}, [location]) // Эффект запускается при изменении location
 
-  // Получение имени авторизованного пользователя
-  const { authName } = useContext(AuthContext);
+	// Массивы путей для команд и игроков
+	const forTeams = ['/', '/newteam']
+	const forPlayers = ['/players', '/newplayer']
 
-  // Функция для проверки, находится ли текущий путь в заданном массиве путей
-  function isSelected(paths: string[]): boolean {
-    return paths.includes(location.pathname);
-  }
+	// Получение имени авторизованного пользователя
+	const { authName } = useContext(AuthContext)
 
-  // Функция для назначения стилей выбранным ссылкам
-  function linkStyles(paths: string[]): SelectedLink {
-    return { color: isSelected(paths) ? '#E4163A' : '' };
-  }
+	// Функция для проверки, находится ли текущий путь в заданном массиве путей
+	function isSelected(paths: string[]): boolean {
+		return paths.includes(location.pathname)
+	}
 
-  // Функция для назначения стилей выбранным иконкам
-  function iconStyles(paths: string[]): SelectedIcon {
-    return { backgroundColor: isSelected(paths) ? '#E4163A' : '' };
-  }
+	// Функция для назначения стилей выбранным ссылкам
+	function linkStyles(paths: string[]): SelectedLink {
+		return { color: isSelected(paths) ? '#E4163A' : '' }
+	}
+
+	// Функция для назначения стилей выбранным иконкам
+	function iconStyles(paths: string[]): SelectedIcon {
+		return { backgroundColor: isSelected(paths) ? '#E4163A' : '' }
+	}
 
 	return (
 		<nav className={classes.navbar}>
@@ -58,19 +62,25 @@ export default function Navbar(): JSX.Element {
 				<span
 					className={classes.ham_menu}
 					onClick={() => {
-						setIsMenuHidden(!isMenuHidden)
+						setIsMobileMenuOpened(!isMobileMenuOpened)
 					}}
 				/>
 
 				<Link to='/' className={classes.logo} />
 				<span className={[classes.profile, showMobileMenu].join(' ')}>
-					<span onClick={() => {navigate('/profile')}} className={classes.name}>{authName === null ? 'John Smith' : authName}</span>
+					<span
+						onClick={() => {
+							navigate('/profile')
+						}}
+						className={classes.name}>
+						{authName === null ? 'John Smith' : authName}
+					</span>
 					<Link to='/profile' id='link' className={classes.icon} />
 				</span>
 			</header>
 
-			<div className={[classes.menu, showMobileMenu].join(' ')}>
-				<ul>
+			<div className={[classes.menu, showMobileMenu].join(' ')} onClick={() => {setIsMobileMenuOpened(false)}}>
+				<ul onClick={(e) => {e.stopPropagation()}}>
 					<li>
 						<Link to='/' className={classes.teams} style={linkStyles(forTeams)}>
 							<div className={classes.teams_icon} style={iconStyles(forTeams)} />

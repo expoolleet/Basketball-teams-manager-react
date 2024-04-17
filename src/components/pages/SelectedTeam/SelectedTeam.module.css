@@ -4,32 +4,26 @@
         height: 140px;
 	}
 
-	.team {
-		width: 100%;
-		height: 90svh;
-		flex-direction: column;
-		text-align: center;
-	}
-
 	.figcaption {
 		display: flex;
 		flex-direction: column;
 	}
 
-	.figcaption span {
-		font-size: 16px;
+	.roster_container{
+		width: 100%;
+		margin-top: 20px;
+		border-radius: 0px;
 	}
-
-	.figcaption h3 {
-		font-size: 18px;
-	}
-
-	.figcaption * {
-		margin-bottom: 60px;
-	}
-
-	.figcaption *:last-child {
-		margin-top: 0px;
+	.roster_player_height,
+	.roster_player_weight,
+	.roster_player_age{
+		display: none;
+	}	
+	
+	.roster_header span:nth-child(3),
+	.roster_header span:nth-child(4),
+	.roster_header span:nth-child(5){
+		display: none;
 	}
 }
 
@@ -39,21 +33,7 @@
 		height: calc(100vh - 80px);
 		margin-left: 140px;
 	}
-
-	.team {
-		width: 90%;
-		height: 40vh;
-		border-bottom-left-radius: 10px;
-		border-bottom-right-radius: 10px;
-		flex-direction: row;
-		text-align: left;
-	}
-
-	.logo {
-		height: 180px;
-        /* height: auto; */
-	}
-
+		
 	.figcaption {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, 1fr);
@@ -62,16 +42,13 @@
 		column-gap: 5px;
 	}
 
-	.figcaption span {
-		font-size: 18px;
+	.background{
+		height: 40vh;
+		min-height: 350px;
 	}
 
-	.figcaption h3 {
-		font-size: 24px;
-	}
-
-    .figcaption * {
-		margin-bottom: 0px;
+	.logo {
+		height: 200px;
 	}
 
 	.name {
@@ -84,23 +61,33 @@
 	}
 
 	.division {
-		grid-area: 2 / 2 / 3 / 4;
-		margin-left: 120px;
-        margin-right: 25px;
+		grid-area: 2 / 3 / 3 / 4;
+		margin-left: 100px;
+        margin-right: 30px;
 	}
 
 	.conference {
 		grid-area: 3 / 1 / 4 / 2;
 	}
-    
-}
 
-.team {
-	background-image: linear-gradient(121.57deg, #707070 1.62%, #393939 81.02%);
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
-	color: #fff;
+	.roster_container{
+		width: 90%;
+		margin-top: 30px;
+		border-radius: 10px;
+	}
+
+	.roster_player_height,
+	.roster_player_weight,
+	.roster_player_age{
+		display: inline;
+	}	
+	
+	.roster_header span:nth-child(3),
+	.roster_header span:nth-child(4),
+	.roster_header span:nth-child(5){
+		display: inline;
+	}
+   
 }
 
 .logo {
@@ -108,26 +95,72 @@
 	padding: 0 30px;
 }
 
-.figcaption span {
-	font-family: 'Avenir Book';
-	font-weight: 400;
+.roster_container{
+	background-color: #fff;
+	overflow-y: auto;
+	color: #707070;
+	border: 1px solid #d1d1d1;
+	text-wrap: nowrap;
 }
 
-.edit,
-.remove {
-	width: 24px;
-	height: 24px;
-	padding: 0 20px;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: contain;
+.roster_container_header{
+	padding: 15px 40px;
+	color: #707070;
+	font-size: 18px;
+	border-bottom: 1px solid #d1d1d1;
+}
+
+.roster_header{
+	padding: 10px 0;
+}
+
+.roster_header span:first-child{
+	text-align: left;
+	margin-left: 40px;
+}
+
+.roster_header span:nth-child(2){
+	text-align: left;
+	margin-left: 10px;
+}
+
+.roster_player{
+	padding: 5px 0;
+}
+
+.roster_header, .roster_player{
+	display: grid;
+	grid-template-columns: 100px minmax(140px, 1fr) repeat(2, 140px) 100px;
+	border-bottom: 1px solid #d1d1d1;
+	text-align: center;
+	align-items: center;
+}
+
+.roster_player_figure{
+	display: flex;
 	cursor: pointer;
 }
 
-.edit {
-	background-image: url('../../../assets/images/create.svg');
+.roster_player_figure img{
+	width: 64px;
+	height: 64px;
+	object-fit: contain;
+	clip-path: circle(40%);
 }
 
-.remove {
-	background-image: url('../../../assets/images/delete.svg');
+.roster_player_caption{
+	display: flex;
+	justify-content: space-evenly;
+	flex-direction: column;
+	text-align: left;
+	padding-left: 15px;
 }
+.roster_player_position{
+	text-transform: capitalize;
+	color: #9c9c9c;
+	font-size: 14px;
+
+}
+
+
+

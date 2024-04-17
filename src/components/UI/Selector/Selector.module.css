@@ -1,26 +1,54 @@
-@media (min-width: 200px) {
-	.items {
-		left: -15px;
-	}
-}
-
-@media (min-width: 768px) {
-	.items {
-		left: 0;
-	}
-}
-
 .container {
 	position: relative;
 	display: flex;
 	flex-direction: row;
 }
 
+.page {
+	border: 1px solid #d1d1d1;
+	background-color: #fff;
+	color: #303030;
+}
+
+.page ~ .arrow {
+	width: 24px;
+	height: 24px;
+	top: 8px;
+	right: 5px;
+}
+
+.page ~ .items {
+	top: calc(-1 * var(--item_height) * var(--itemsCount) - 5px);
+}
+
+.input {
+	background-color: #f6f6f6;
+}
+
+.input ~ .arrow {
+	width: 16px;
+	height: 16px;
+	opacity: 0.5;
+	top: 12px;
+	right: 8px;
+	transform: rotate(180deg);
+}
+
+.input ~ .items {
+	top: calc(var(--item_height) + 4px);
+}
+
+.selector.input {
+	width: 100%;
+}
+
+.input ~ .items {
+	width: 100%;
+}
+
 .selector {
 	height: 40px;
 	border-radius: 4px;
-	border: 1px solid #d1d1d1;
-	background-color: #fff;
 	font-size: 14px;
 	font-family: 'Avenir Regular';
 	padding: 8px 15px 8px 18px;
@@ -29,7 +57,6 @@
 	position: relative;
 	font-size: 14px;
 	min-width: 88px;
-	color: #303030;
 }
 
 .selector::after {
@@ -43,12 +70,12 @@
 
 .items {
 	position: absolute;
-	top: calc(-1 * var(--item_height) * var(--itemsCount) - 5px);
 	border-radius: 4px;
 	border: 1px solid #d1d1d1;
 	background-color: #fff;
 	min-width: 88px;
 	font-size: 14px;
+	z-index: 1;
 }
 
 .item {
@@ -60,12 +87,14 @@
 	color: #9c9c9c;
 }
 
-.item:hover.item:first-child, .item:active.item:first-child{
+.item:hover.item:first-child,
+.item:active.item:first-child {
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 }
 
-.item:hover.item:last-child, .item:active.item:last-child{
+.item:hover.item:last-child,
+.item:active.item:last-child {
 	border-bottom-left-radius: 4px;
 	border-bottom-right-radius: 4px;
 }
@@ -85,11 +114,7 @@
 }
 
 .arrow {
-	width: 24px;
-	height: 24px;
 	position: absolute;
-	top: 8px;
-	right: 5px;
 	background-image: url('../../../assets/images/expand_arrow.svg');
 	background-position: center;
 	background-size: contain;
@@ -97,18 +122,27 @@
 	cursor: pointer;
 }
 
-.arrow_animation_up {
-	animation: rotateUp 0.2s;
-	animation-fill-mode: forwards;
-}
-
-.arrow_animation_down {
+.page ~ .arrow_rotate_animation_1 {
 	animation: rotateDown 0.2s;
 	animation-fill-mode: forwards;
 }
 
-.items_hide,
-.item_hide {
+.page ~ .arrow_rotate_animation_2 {
+	animation: rotateUp 0.2s;
+	animation-fill-mode: forwards;
+}
+
+.input ~ .arrow_rotate_animation_1 {
+	animation: rotateUp 0.2s;
+	animation-fill-mode: forwards;
+}
+
+.input ~ .arrow_rotate_animation_2 {
+	animation: rotateDown 0.2s;
+	animation-fill-mode: forwards;
+}
+
+.items_hide {
 	display: none;
 }
 

@@ -13,6 +13,7 @@ export const privateRoutes: IRoutesProps[] = [ // частные пути и с�
 	{ path: '/', element: Teams},
 	{ path: 'newteam', element: Teams},
 	{ path: 'players', element: Players},
+	{ path: 'newplayer', element: Players},
 	{ path: '*', element: Error},
 ]
 

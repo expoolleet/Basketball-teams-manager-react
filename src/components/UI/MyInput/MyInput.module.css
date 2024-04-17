@@ -1,20 +1,24 @@
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+	-webkit-appearance: none;
+	margin: 0;
 }
 
-input[type=number] {
-	-moz-appearance: textfield;
-  }
+input::-webkit-calendar-picker-indicator {
+	display: none;
+}
 
-.myInput input{
+input[type='number'] {
+	-moz-appearance: textfield;
+}
+
+.myInput input {
 	width: 100%;
 }
 
 .myInput {
 	min-height: 92px;
-	width: 100%;
+	position: relative;
 }
 
 .myInput input[type='text'] {
@@ -22,7 +26,12 @@ input[type=number] {
 }
 
 .myInput input[type='password'] {
-	letter-spacing: 0.2em;
+	letter-spacing: 0.14em;
+	font-size: 12px;
+}
+
+.myInput input[type='date'] {
+	cursor: pointer;
 }
 
 input::-ms-reveal,
@@ -34,6 +43,9 @@ input::-ms-clear {
 	font-size: 14px;
 	line-height: 24px;
 	color: #707070;
+	display: flex;
+	flex-direction: column;
+	text-wrap: nowrap;
 }
 
 .myInput input {
@@ -43,6 +55,7 @@ input::-ms-clear {
 	height: 40px;
 	padding-left: 15px;
 	margin-top: 3px;
+	font-family: 'Avenir Book';
 }
 
 .myInput input:hover {
@@ -54,6 +67,10 @@ input::-ms-clear {
 	caret-color: rgba(0, 0, 0, 0.35);
 }
 
+.myInput input:hover ~ .date_icon, .date_icon:hover {
+	filter: invert(40%);
+}
+
 .myInput input:focus {
 	outline: none;
 }
@@ -63,14 +80,18 @@ input::-ms-clear {
 	background-color: #f6f6f6;
 }
 
+.date_icon {
+	background-image: url('../../../assets/images/calendar-blank.svg');
+}
+
+.date_icon,
 .field_icon_close,
 .field_icon_open {
 	width: 16px;
 	height: 16px;
-	position: relative;
-	float: right;
-	margin-right: 12px;
-	margin-top: -28px;
+	position: absolute;
+	top: 39px;
+	right: 12px;
 	cursor: pointer;
 	user-select: none;
 }
@@ -83,7 +104,7 @@ input::-ms-clear {
 	background-image: url('../../../assets/images/eye_rounded.svg');
 }
 
-input:invalid[data-focused='true']{
+input:invalid[data-focused='true'] {
 	border: 0.5px solid #ff768e;
 }
 
@@ -93,7 +114,7 @@ input:invalid[data-focused='true'] ~ .error_message,
 	font-size: 12px;
 	color: #ff768e;
 }
-
+input:disabled ~ .error_message,
 input:valid ~ .error_message,
 input:invalid[data-focused='false'] ~ .error_message,
 .error_message_disable {

@@ -55,8 +55,10 @@ export default function Teams(): JSX.Element {
 	const [teams, setTeams] = useState<ITeam[]>([])
 	const [teamsCount, setTeamsCount] = useState<number>(0)
 
-	 // Загрузка данных команд из localStorage при монтировании компонента
+	const [isBlur, setIsBlur] = useState<boolean>(true)
+
 	useEffect(() => {
+		setIsLoading(true)
 		const localTeams = localStorage.getItem(TEAMS) as string
 		if (localTeams) setTeams(JSON.parse(localTeams))
 		else {
@@ -86,9 +88,9 @@ export default function Teams(): JSX.Element {
 
 		setTeamsCount(currentTeams.length) // Общее количество команд
 
-		const endOffset = itemOffset + currentAmountOfItemsPerPage
-		setTotalPages(Math.ceil(currentTeams.length / currentAmountOfItemsPerPage))
-		setTeamsToRender(Array.from(currentTeams).slice(itemOffset, endOffset))
+		const endOffset = itemOffset + currentAmountOfItemsPerPage // конечный офсет для отрисовки карточек на странице
+		setTotalPages(Math.ceil(currentTeams.length / currentAmountOfItemsPerPage)) // количество страниц
+		setTeamsToRender(Array.from(currentTeams).slice(itemOffset, endOffset)) // нужное количество элментов для отрисовки
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filteredTeams, currentState, itemOffset, currentAmountOfItemsPerPage])
 
@@ -167,8 +169,7 @@ export default function Teams(): JSX.Element {
 	}
 
 	// Функция перехода в режим редактирования команды
-	function handleEditTeam(team: ITeam) : void{
-
+	function handleEditTeam(team: ITeam): void {
 		setEditTeam(team)
 		setCurrentState(EDIT_EXIST_TEAM_STATE)
 	}
@@ -179,11 +180,11 @@ export default function Teams(): JSX.Element {
 	}
 
 	// Функция для определения состояния в зависимости от значения currentState
-	function getState(currentState: string) {
+	function getState(currentState: string): JSX.Element {
 		switch (currentState) {
 			case TEAMS_STATE:
 				return (
-					<div className={shared.container}>
+					<div className={shared.container} onClick={() => {setIsBlur(true)}}>
 						<div className={shared.header}>
 							<Search {...searchInput} onChange={handleSearch} value={filter} />
 							<AddButton
@@ -230,21 +231,32 @@ export default function Teams(): JSX.Element {
 								currentPage={currentPage}
 							/>
 							<Selector
+								color='white'
 								items={itemsPerPage}
 								selectedItem={currentAmountOfItemsPerPage}
-								onChahgedSelectorItems={handleSelectorItemsChange}
+								onChange={handleSelectorItemsChange}
+								isBlur={isBlur}
+								setIsBlur={setIsBlur}
 							/>
 						</div>
 					</div>
 				)
 			case NEW_TEAM_STATE:
-				return <NewTeam isEditTeam={false}/>
+				return <NewTeam isEditTeam={false} />
 
 			case EDIT_EXIST_TEAM_STATE:
-				return <NewTeam editTeam={editTeam} isEditTeam={true}/>
+				return <NewTeam editTeam={editTeam} isEditTeam={true} />
 
 			case SELECTED_TEAM_STATE:
-				return <SelectedTeam selectedTeam={selectedTeam} deleteTeam={handleDeleteTeam} editTeam={handleEditTeam} />
+				return (
+					<SelectedTeam
+						selectedTeam={selectedTeam}
+						deleteTeam={handleDeleteTeam}
+						editTeam={handleEditTeam}
+					/>
+				)
+			default:
+				return <></>
 		}
 	}
 

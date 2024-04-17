@@ -1,3 +1,40 @@
-.player{
-    
+@media (min-width: 0px) {
+
+	.photo {
+		max-height: 150px;
+		max-width: 150px;
+		margin-top: 50px;
+	}
+}
+
+@media (min-width: 768px) {
+
+	.photo {
+		min-height: 210px;
+        max-height: 210px;
+		max-width: 300px;
+		min-width: 300px;
+        margin-top: 10px;
+	}
+}
+
+.photo{
+	object-fit: contain;
+}
+
+.card{
+	justify-content: flex-end;
+}
+
+
+.caption span{
+    color: #FF5761;
+}
+
+.caption h3 {
+	color: #fff;
+	font-family: 'Avenir Black';
+	line-height: 24px;
+	padding-bottom: 10px;
+	padding: 0px 10px;
 }

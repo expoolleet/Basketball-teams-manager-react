@@ -12,9 +12,9 @@ interface IMultiSelectorProps {
 const delayMS: number = 200
 
 export default function MultiSelector(props: any) {
-	const { selectedItems, items, setSelectedPositions, onChahgedSelectorItems }: IMultiSelectorProps = props
+	const { selectedItems, items, setSelectedPositions, onChahgedSelectorItems }: IMultiSelectorProps =
+		props
 	const [itemsClass, setItemsClass] = useState<string>(classes.items_hide)
-	const [itemClass, setItemClass] = useState<string>(classes.item_hide)
 	const [areItemsHiden, setAreItemsHiden] = useState<boolean>(true)
 	const [arrowAnimClass, setArrowAnimClass] = useState<string>('')
 	const [multiSelectorStyle, setMultiSelectorStyle] = useState<{}>({ backgroundColor: '#fff' })
@@ -27,7 +27,6 @@ export default function MultiSelector(props: any) {
 			setMultiSelectorStyle({
 				backgroundColor: '#fff',
 			})
-		// изменение цвет фона на #fff в случае, если отсутствуют выбранные элементы в селекторе
 		else setMultiSelectorStyle({ backgroundColor: '#f6f6f6' }) // изменение цвет фона на #f6f6f6 в случае, если есть элементы в селекторе
 	}, [selectedItems.length])
 
@@ -48,26 +47,25 @@ export default function MultiSelector(props: any) {
 		cursor: areItemsHiden ? 'default' : 'pointer',
 	}
 
+	function openSelector(): void {
+		setMultiSelectorStyle({ backgroundColor: '#fff' })
+		setItemsClass(classes.items)
+		setArrowAnimClass(classes.arrow_rotate_animation_1)
+	}
+
 	function hideSelector(): void {
 		// скрытие селектора
+		if (selectedItems.length !== 0) setMultiSelectorStyle({ backgroundColor: '#f6f6f6' })
+		setArrowAnimClass(classes.arrow_rotate_animation_2)
 		setTimeout(() => {
 			setItemsClass(classes.items_hide)
-			setItemClass(classes.item_hide)
 		}, delayMS)
 	}
 
 	function onClickSelect(): void {
-		// обработчик при нажатия на селектор
-		if (areItemsHiden) {
-			setMultiSelectorStyle({ backgroundColor: '#fff' })
-			setItemsClass(classes.items)
-			setItemClass(classes.item)
-			setArrowAnimClass(classes.arrow_animation_up)
-		} else {
-			if (selectedItems.length !== 0) setMultiSelectorStyle({ backgroundColor: '#f6f6f6' })
-			hideSelector()
-			setArrowAnimClass(classes.arrow_animation_down)
-		}
+		if (areItemsHiden) openSelector()
+		else hideSelector()
+
 		setAreItemsHiden(!areItemsHiden)
 	}
 
@@ -141,7 +139,7 @@ export default function MultiSelector(props: any) {
 				{items
 					.filter((item) => !selectedItems.includes(item))
 					.map((item) => (
-						<li key={item} className={itemClass} onClick={onClickItem}>
+						<li key={item} className={classes.item} onClick={onClickItem}>
 							{item}
 						</li>
 					))}

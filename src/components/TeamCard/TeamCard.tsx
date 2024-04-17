@@ -1,5 +1,6 @@
 import React from 'react'
 import classes from './TeamCard.module.css'
+import shared from '../shared/Card.module.css'
 
 // интерфейс карточки команды
 interface ITeamCardProps {
@@ -14,12 +15,12 @@ export default function TeamCard(props: any) {
 
 	return (
 		<figure
-			className={classes.card}
+			className={[shared.card, classes.card].join(' ')}
 			onClick={() => {
 				onClick(name)
 			}}>
 			<img draggable='false' src={logo} alt={name} className={classes.logo} />
-			<figcaption className={classes.caption}>
+			<figcaption className={[shared.caption, classes.caption].join(' ')}>
 				<h3>{name}</h3>
 				<h5>Year of foundation: {year}</h5>
 			</figcaption>

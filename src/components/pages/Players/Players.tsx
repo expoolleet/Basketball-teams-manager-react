@@ -1,37 +1,48 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classes from './Players.module.css'
 import Search from '../../UI/Search/Search'
 import AddButton from '../../UI/AddButton/AddButton'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Pagination from '../../Pagination/Pagination'
 import Selector from '../../UI/Selector/Selector'
 import PlayerCard from '../../PlayerCard/PlayerCard'
 import shared from '../../shared/MainPages.module.css'
 import MultiSelector from '../../UI/MultiSelector/MultiSelector'
+import { playersList } from '../../../utils/players'
+import PageLoader from '../../UI/PageLoader/PageLoader'
+import NewPlayer from '../NewPlayer/NewPlayer'
+import { PlayerContext } from '../../context/PlayerContext'
+import { ITeam } from '../Teams/Teams'
+import SelectedPlayer from '../SelectedPlayer/SelectedPlayer'
+import { SelectedPlayerContext } from '../../context/SelectedPlayerContext'
 
 export interface IPlayer {
 	photo: string
 	name: string
 	position: string
 	team: string
-	height_cm: number
-	weight_kg: number
-	birthday: Date
-	number: number
+	height_cm: string
+	weight_kg: string
+	birthday: string
+	number: string
+	[key: string]: string
 }
 
-const PLAYERS_STATE: string = 'teams'
+const PLAYERS: string = 'players'
+
+const PLAYERS_STATE: string = 'players'
 
 const SELECTED_PLAYERS_STATE: string = 'selected'
 
-const NEW_PLAYER_STATE: string = 'newteam'
+const EDIT_EXIST_PLAYER_STATE: string = 'edit'
+
+const NEW_PLAYER_STATE: string = 'newplayer'
 
 const itemsPerPage: number[] = [6, 12, 24]
 
-const positions: string[] = ['Center Forward', 'Guard Forward', 'Forward', 'Center', 'Guard']
-
 export default function Players(): JSX.Element {
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	const [currentState, setCurrentState] = useState<string>(PLAYERS_STATE)
 	const [filter, setFilter] = useState<string>('')
@@ -39,22 +50,120 @@ export default function Players(): JSX.Element {
 	const [players, setPlayers] = useState<IPlayer[]>([])
 	const [playersCount, setPlayersCount] = useState<number>(0)
 	const [totalPages, setTotalPages] = useState<number>(0)
+	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const [currentPage, setCurrentPage] = useState<number>(0)
 	const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0])
-	const [selectedPositions, setSelectedPositions] = useState<string[]>([])
+	const [selectedTeams, setSelectedTeams] = useState<string[]>([])
+	const [editPlayer, setEditPlayer] = useState<IPlayer>()
 	const [itemOffset, setItemOffset] = useState<number>(0)
-	const [selectedPlayer, setSelectedPlayer] = useState<IPlayer>({
-		photo: '',
-		name: '',
-		position: '',
-		team: '',
-		height_cm: 0,
-		weight_kg: 0,
-		birthday: new Date(),
-		number: 0,
-	})
+	const [isBlur, setIsBlur] = useState<boolean>(true)
+	// const [selectedPlayer, setSelectedPlayer] = useState<IPlayer>()
 
-	function handleSearch(event: any): void {}
+	const { selectedPlayer, setSelectedPlayer } = useContext(SelectedPlayerContext)
+
+	const [filteredPlayers, setFilteredPlayers] = useState<IPlayer[]>([])
+
+	//Состояние списка команд
+	const [teams, setTeams] = useState<string[]>([])
+
+	useEffect(() => {
+		const storage = localStorage.getItem('teams')
+
+		if (storage) {
+			const localTeams = JSON.parse(storage) as ITeam[]
+			const teams: string[] = []
+			localTeams.forEach((team) => {
+				teams.push(team.name)
+			})
+			setTeams(teams)
+		}
+	}, [])
+
+	// Определение состояния компонента в зависимости от текущего маршрута
+	useEffect(() => {
+		if (location.pathname === '/' + PLAYERS_STATE) setCurrentState(PLAYERS_STATE)
+		else if (location.pathname === '/' + NEW_PLAYER_STATE) setCurrentState(NEW_PLAYER_STATE)
+	}, [location])
+
+	// Загрузка состояния выбранного игрока, если это произошло из просмотра команды
+	useEffect(() => {
+		if (selectedPlayer) setCurrentState(SELECTED_PLAYERS_STATE)
+	}, [selectedPlayer])
+
+	useEffect(() => {
+		setIsLoading(true)
+		const localPlayers = localStorage.getItem(PLAYERS) as string
+		if (localPlayers) setPlayers(JSON.parse(localPlayers))
+		else {
+			setPlayers(playersList)
+			localStorage.setItem(PLAYERS, JSON.stringify(playersList))
+		}
+		setIsLoading(false)
+	}, [currentState]) // Зависимость от состояния, чтобы обновлять данные при переключении
+
+	useEffect(() => {
+		let currentPlayers: IPlayer[] = []
+
+		const localPlayers = localStorage.getItem(PLAYERS) as string | null
+		if (!localPlayers) return
+
+		currentPlayers = JSON.parse(localPlayers) as IPlayer[]
+
+		if (filter.length !== 0) {
+			currentPlayers = filteredPlayers
+		}
+
+		// выборка игроков с их соответсвующей командой
+		let selectedPlayers: IPlayer[] = []
+		if (selectedTeams.length !== 0) {
+			selectedTeams.forEach((team) =>
+				currentPlayers.forEach((player) => {
+					if (player.team === team) {
+						selectedPlayers.push(player)
+					}
+				})
+			)
+			currentPlayers = selectedPlayers
+		}
+
+		setPlayersCount(currentPlayers.length)
+
+		const endOffset = itemOffset + currentAmountOfItemsPerPage
+		setTotalPages(Math.ceil(currentPlayers.length / currentAmountOfItemsPerPage))
+		setPlayersToRender(Array.from(currentPlayers).slice(itemOffset, endOffset))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedTeams, filteredPlayers, currentState, itemOffset, currentAmountOfItemsPerPage])
+
+	// Обработчик ввода текста в поле поиска
+	function handleSearch(event: any): void {
+		const search: string = event.target.value
+
+		setCurrentPage(0)
+		setItemOffset(0)
+
+		let filteredPlayers: IPlayer[] = []
+		const selectedPlayers: IPlayer[] = []
+
+		selectedTeams.forEach((team) =>
+			players.forEach((player) => {
+				if (player.team === team) {
+					selectedPlayers.push(player)
+				}
+			})
+		)
+
+		if (selectedPlayers.length !== 0)
+			selectedPlayers.forEach((player) => {
+				if (player.name.toLowerCase().includes(search.toLowerCase())) filteredPlayers.push(player)
+			})
+		else if (selectedTeams.length === 0)
+			players.forEach((player) => {
+				if (player.name.toLowerCase().includes(search.toLowerCase())) filteredPlayers.push(player)
+			})
+
+		setFilter(search)
+		setFilteredPlayers(filteredPlayers)
+	}
 
 	function calculateOffset(value: number) {
 		const newOffset = (value * currentAmountOfItemsPerPage) % playersCount
@@ -70,7 +179,6 @@ export default function Players(): JSX.Element {
 	function handlePlayerCardClick(name: string): void {
 		playersToRender.forEach((player) => {
 			if (player.name === name) {
-				setCurrentState(SELECTED_PLAYERS_STATE)
 				setSelectedPlayer(player)
 				return
 			}
@@ -85,8 +193,34 @@ export default function Players(): JSX.Element {
 		setCurrentAmountOfItemsPerPage(Number(item))
 	}
 
-	function handlePositionsChange(item: any): void {
-		setSelectedPositions([...selectedPositions, item])
+	// Функция перехода в режим редактирования команды
+	function handleEditPlayer(player: IPlayer): void {
+		setEditPlayer(player)
+		setCurrentState(EDIT_EXIST_PLAYER_STATE)
+	}
+
+	// Функция удаления команды
+	function handleDeletePlayer(team: ITeam): void {
+		const updatedPlayersList = players.filter((p) => p.name !== team.name)
+		setPlayers(updatedPlayersList)
+		localStorage.setItem(PLAYERS, JSON.stringify(updatedPlayersList))
+
+		if (updatedPlayersList.length === currentAmountOfItemsPerPage) {
+			setCurrentPage(currentPage > 0 ? currentPage - 1 : 0)
+			calculateOffset(currentPage > 0 ? currentPage - 1 : 0)
+		}
+
+		if (filteredPlayers.length !== 0) {
+			setCurrentPage(0)
+			setItemOffset(0)
+			setFilter('')
+		}
+		setPlayersCount(updatedPlayersList.length)
+		navigate('/players')
+	}
+
+	function handleTeamsChange(item: any): void {
+		setSelectedTeams([...selectedTeams, item])
 	}
 
 	const searchInput = {
@@ -94,61 +228,109 @@ export default function Players(): JSX.Element {
 		placeholder: 'Search...',
 	}
 
-	return (
-		<div className={shared.container}>
-			<div className={shared.header}>
-				<Search {...searchInput} onChange={handleSearch} value={filter} />
-				<MultiSelector
-					items={positions}
-					selectedItems={selectedPositions}
-					setSelectedPositions={setSelectedPositions}
-					onChahgedSelectorItems={handlePositionsChange}
-				/>
-				<AddButton
-					onClick={() => {
-						navigate('/players')
-					}}
-				/>
-			</div>
-			<div className={shared.cards}>
-				{playersToRender.length === 0 ? (
-					<div className={shared.empty}>
-						<div className={[classes.background, shared.background].join(' ')} />
-						<div className={shared.text}>
-							<h1>Empty here</h1>
+	// Отображение компонента загрузчика, пока данные не загружены
+	if (isLoading) {
+		return <PageLoader />
+	}
 
-							{filter.length === 0 ? (
-								<h3>Add new players to continue</h3>
+	function getState(currentState: string): JSX.Element {
+		switch (currentState) {
+			case PLAYERS_STATE:
+				return (
+					<div
+						className={shared.container}
+						onClick={() => {
+							setIsBlur(true)
+						}}>
+						<div className={shared.header}>
+							<Search {...searchInput} onChange={handleSearch} value={filter} />
+							<MultiSelector
+								items={teams}
+								selectedItems={selectedTeams}
+								setSelectedPositions={setSelectedTeams}
+								onChahgedSelectorItems={handleTeamsChange}
+							/>
+							<AddButton
+								onClick={() => {
+									navigate('/newplayer')
+								}}
+							/>
+						</div>
+						<div className={shared.cards}>
+							{playersToRender.length === 0 ? (
+								<div className={shared.empty}>
+									<div
+										className={[
+											classes.background,
+											shared.background,
+										].join(' ')}
+									/>
+									<div className={shared.text}>
+										<h1>Empty here</h1>
+
+										{filter.length === 0 &&
+										selectedTeams.length === 0 ? (
+											<h3>Add new players to continue</h3>
+										) : (
+											<h3>Search got no results</h3>
+										)}
+									</div>
+								</div>
 							) : (
-								<h3>Search got no results</h3>
+								playersToRender.map((player) => (
+									<PlayerCard
+										key={player.name}
+										photo={player.photo}
+										name={player.name}
+										number={player.number}
+										team={player.team}
+										onClick={handlePlayerCardClick}
+									/>
+								))
 							)}
 						</div>
-					</div>
-				) : (
-					playersToRender.map((player) => (
-						<PlayerCard
-							key={player.name}
-							photo={player.photo}
-							name={player.name}
-							number={player.number}
-							onClick={handlePlayerCardClick}
-						/>
-					))
-				)}
-			</div>
 
-			<div className={shared.footer}>
-				<Pagination
-					totalPages={totalPages}
-					onPageChange={handlePaginationClick}
-					currentPage={currentPage}
-				/>
-				<Selector
-					items={itemsPerPage}
-					selectedItem={currentAmountOfItemsPerPage}
-					onChahgedSelectorItems={handleItemsPerPageChange}
-				/>
-			</div>
-		</div>
+						<div className={shared.footer}>
+							<Pagination
+								totalPages={totalPages}
+								onPageChange={handlePaginationClick}
+								currentPage={currentPage}
+							/>
+							<Selector
+								items={itemsPerPage}
+								selectedItem={currentAmountOfItemsPerPage}
+								onChange={handleItemsPerPageChange}
+								isBlur={isBlur}
+								setIsBlur={setIsBlur}
+							/>
+						</div>
+					</div>
+				)
+			case NEW_PLAYER_STATE:
+				return <NewPlayer isEditPlayer={false} />
+			case EDIT_EXIST_PLAYER_STATE:
+				return <NewPlayer editPlayer={editPlayer} isEditPlayer={true} />
+			case SELECTED_PLAYERS_STATE:
+				return (
+					<SelectedPlayer
+						selectedPlayer={selectedPlayer}
+						deletePlayer={handleDeletePlayer}
+						editPlayer={handleEditPlayer}
+					/>
+				)
+			default:
+				return <></>
+		}
+	}
+
+	return (
+		<PlayerContext.Provider
+			value={{
+				players,
+				setPlayers,
+				teams,
+			}}>
+			{getState(currentState)}
+		</PlayerContext.Provider>
 	)
 }

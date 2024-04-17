@@ -1,16 +1,20 @@
-.button {
+.button,
+.gray_button {
 	height: 40px;
 	width: 100%;
 	margin: 20px 0;
-	background-color: #e4163a;
 	border-radius: 4px;
-	border: none;
-	color: #ffffff;
 	font-weight: 500;
 	font-style: normal;
 	font-size: 16px;
 	cursor: pointer;
 	font-family: 'Avenir Book';
+}
+
+.button {
+	background-color: #e4163a;
+	border: none;
+	color: #ffffff;
 }
 
 .button:hover {
@@ -25,4 +29,19 @@
 .button:disabled {
 	color: #d1d1d1;
 	background-color: #f6f6f6;
+}
+
+.gray_button {
+	background-color: #fff;
+	color: #9c9c9c;
+	border: 2px solid #c9c9c9;
+}
+
+.gray_button:hover {
+	background-color: #d1d1d1;
+}
+
+.gray_button:active {
+	color: #707070;
+	background-color: #9c9c9c;
 }
