@@ -1,4 +1,3 @@
-import { ITeam } from '../pages/Teams/Teams'
 import { IPlayer } from './../pages/Players/Players'
 import { createContext } from 'react'
 

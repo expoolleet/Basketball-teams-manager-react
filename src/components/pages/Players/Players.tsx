@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react'
-import classes from './Players.module.css'
-import Search from '../../UI/Search/Search'
-import AddButton from '../../UI/AddButton/AddButton'
-import { useLocation, useNavigate } from 'react-router-dom'
-import Pagination from '../../Pagination/Pagination'
-import Selector from '../../UI/Selector/Selector'
-import PlayerCard from '../../PlayerCard/PlayerCard'
-import shared from '../../shared/MainPages.module.css'
-import MultiSelector from '../../UI/MultiSelector/MultiSelector'
-import { playersList } from '../../../utils/players'
-import PageLoader from '../../UI/PageLoader/PageLoader'
-import NewPlayer from '../NewPlayer/NewPlayer'
-import { PlayerContext } from '../../context/PlayerContext'
-import { ITeam } from '../Teams/Teams'
-import SelectedPlayer from '../SelectedPlayer/SelectedPlayer'
-import { SelectedPlayerContext } from '../../context/SelectedPlayerContext'
+import React, { useContext, useEffect, useState } from 'react' // Импорт React, хуков и контекстов
+import classes from './Players.module.css' // Импорт стилей для Players
+import Search from '../../UI/Search/Search' // Импорт компонента поиска
+import AddButton from '../../UI/AddButton/AddButton' // Импорт компонента кнопки добавления
+import { useLocation, useNavigate } from 'react-router-dom' // Импорт хуков для работы с роутингом
+import Pagination from '../../Pagination/Pagination' // Импорт компонента пагинации
+import Selector from '../../UI/Selector/Selector' // Импорт компонента выбора количества элементов на странице
+import PlayerCard from '../../PlayerCard/PlayerCard' // Импорт компонента карточки игрока
+import shared from '../../shared/MainPages.module.css' // Импорт общих стилей для основных страниц
+import MultiSelector from '../../UI/MultiSelector/MultiSelector' // Импорт компонента мульти-выбора
+import { playersList } from '../../../utils/players' // Импорт данных игроков для инициализации
+import PageLoader from '../../UI/PageLoader/PageLoader' // Импорт компонента загрузчика
+import NewPlayer from '../NewPlayer/NewPlayer' // Импорт компонента создания нового игрока
+import { PlayerContext } from '../../context/PlayerContext' // Импорт контекста игроков
+import { ITeam } from '../Teams/Teams' // Импорт интерфейса команды из Teams
+import SelectedPlayer from '../SelectedPlayer/SelectedPlayer' // Импорт компонента просмотра выбранного игрока
+import { SelectedPlayerContext } from '../../context/SelectedPlayerContext' // Импорт контекста выбранного игрока
 
 export interface IPlayer {
+	// интерфейс игрока
 	photo: string
 	name: string
 	position: string
@@ -30,40 +31,64 @@ export interface IPlayer {
 
 const PLAYERS: string = 'players'
 
-const PLAYERS_STATE: string = 'players'
+const PLAYERS_STATE: string = 'players' // константа состояния players
 
-const SELECTED_PLAYERS_STATE: string = 'selected'
+const SELECTED_PLAYERS_STATE: string = 'selected' // константа состояния selected
 
-const EDIT_EXIST_PLAYER_STATE: string = 'edit'
+const EDIT_EXIST_PLAYER_STATE: string = 'edit' // константа состояния edit
 
-const NEW_PLAYER_STATE: string = 'newplayer'
+const NEW_PLAYER_STATE: string = 'newplayer' // константа состояния newplayer
 
 const itemsPerPage: number[] = [6, 12, 24]
 
 export default function Players(): JSX.Element {
-	const navigate = useNavigate()
-	const location = useLocation()
+	const navigate = useNavigate() // Хук навигации
+	const location = useLocation() // Хук поисковой строки браузера
 
+	// currentState - текущее состояние компонента
 	const [currentState, setCurrentState] = useState<string>(PLAYERS_STATE)
+
+	// filter - строка фильтра для поиска игроков
 	const [filter, setFilter] = useState<string>('')
+
+	// playersToRender - массив игроков для отображения на текущей странице
 	const [playersToRender, setPlayersToRender] = useState<IPlayer[]>([])
+
+	// players - массив всех игроков
 	const [players, setPlayers] = useState<IPlayer[]>([])
+
+	// playersCount - общее количество игроков
 	const [playersCount, setPlayersCount] = useState<number>(0)
+
+	// totalPages - общее количество страниц (для пагинации)
 	const [totalPages, setTotalPages] = useState<number>(0)
+
+	// isLoading - флаг загрузки данных
 	const [isLoading, setIsLoading] = useState<boolean>(true)
-	const [currentPage, setCurrentPage] = useState<number>(0)
-	const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0])
+
+	// currentPage - текущая страница (для пагинации)
+	const [currentPage, setCurrentPage] = useState<number>(0) // Изначально первая страница
+
+	// currentAmountOfItemsPerPage - количество элементов на странице (для пагинации)
+	const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0]) // Первое значение из массива itemsPerPage
+
+	// selectedTeams - выбранные команды
 	const [selectedTeams, setSelectedTeams] = useState<string[]>([])
+
+	// editPlayer - редактируемый игрок
 	const [editPlayer, setEditPlayer] = useState<IPlayer>()
+
+	// itemOffset - смещение для пагинации
 	const [itemOffset, setItemOffset] = useState<number>(0)
+
+	// isBlur - флаг размытия
 	const [isBlur, setIsBlur] = useState<boolean>(true)
-	// const [selectedPlayer, setSelectedPlayer] = useState<IPlayer>()
 
 	const { selectedPlayer, setSelectedPlayer } = useContext(SelectedPlayerContext)
 
 	const [filteredPlayers, setFilteredPlayers] = useState<IPlayer[]>([])
 
-	//Состояние списка команд
+	// Состояние списка команд
 	const [teams, setTeams] = useState<string[]>([])
 
 	// Определение состояния компонента в зависимости от текущего маршрута
@@ -92,7 +117,6 @@ export default function Players(): JSX.Element {
 		// Загрузка команд из хранилища
 		LoadTeams()
 
-		console.log(currentState)
 		setIsLoading(false)
 	}, [currentState]) // Зависимость от состояния, чтобы обновлять данные при переключении
 

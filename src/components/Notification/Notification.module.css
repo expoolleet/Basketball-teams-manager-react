@@ -1,18 +1,18 @@
 @media (min-width: 0px) {
-	.error_notification, .success_notification {
+	.error_notification,
+	.success_notification {
 		position: fixed;
 		text-wrap: pretty;
 		padding: 20px 20px;
 		margin-left: 30%;
 		right: 15px;
 		top: 20px;
-		/* top: 35svh; */
-		/* right: 30vw; */
 	}
 }
 
 @media (min-width: 768px) {
-	.error_notification, .success_notification {
+	.error_notification,
+	.success_notification {
 		display: block;
 		text-wrap: nowrap;
 		padding: 10px 20px;
@@ -21,7 +21,8 @@
 	}
 }
 
-.error_notification, .success_notification {
+.error_notification,
+.success_notification {
 	position: absolute;
 	color: #ffffff;
 	border-radius: 4px;
@@ -32,7 +33,7 @@
 	background-color: #ff5761;
 }
 
-.success_notification{
+.success_notification {
 	background-color: #3ddf52;
 }
 

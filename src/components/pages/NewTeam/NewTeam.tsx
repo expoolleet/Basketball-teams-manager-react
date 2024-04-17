@@ -6,14 +6,14 @@ import classes from './NewTeam.module.css'
 
 // Импорт компонентов из других модулей
 import { Link, useNavigate } from 'react-router-dom'
-import MyInput from '../../UI/MyInput/MyInput'
-import MyButton from '../../UI/MyButton/MyButton'
-import PhotoInput from '../../UI/PhotoInput/PhotoInput'
-import { ITeam } from '../Teams/Teams'
-import { TeamContext } from '../../context/TeamContext'
-import Notification from '../../Notification/Notification'
-import shared from '../../shared/AdditionalPages.module.css'
-import { ErrorMessageType } from '../../UI/MyInput/MyInput'
+import MyInput from '../../UI/MyInput/MyInput' // Импорт компонента инпута
+import MyButton from '../../UI/MyButton/MyButton' // Импорт компонента кнопки
+import PhotoInput from '../../UI/PhotoInput/PhotoInput' // Импорт компонента для загрузки изображений
+import { ITeam } from '../Teams/Teams' // Импорт интерфейса команды из Teams
+import { TeamContext } from '../../context/TeamContext' // Импорт контекста команд
+import Notification from '../../Notification/Notification' // Импорт компонента уведомлений
+import shared from '../../shared/AdditionalPages.module.css' // Импорт общих стилей
+import { ErrorMessageType } from '../../UI/MyInput/MyInput' // Импорт типа ошибки
 
 // Константа для таймаута уведомления
 const timeoutMS: number = 3000
@@ -50,8 +50,7 @@ export default function NewTeam(props: any) {
 	const [notificationMessage, setNotificationMessage] = useState<string>('')
 	const [notificationType, setNotificationType] = useState<string>('')
 
-	// Состояние для флага ошибки года основания
-	const [isYearError, setIsYearError] = useState<boolean>(false)
+	// Состояние насильной ошибки
 	const [forcedErrorMessage, setForcedErrorMessage] = useState<ErrorMessageType>({
 		name: '',
 		isError: false,
@@ -164,8 +163,7 @@ export default function NewTeam(props: any) {
 
 		// Проверка валидности года основания
 		if (Number(values.year) < 1900 || Number(values.year) > currentYear) {
-			// setIsYearError(true)
-			setForcedErrorMessage({name: 'year', isError: true})
+			setForcedErrorMessage({ name: 'year', isError: true })
 			return
 		}
 
@@ -208,8 +206,9 @@ export default function NewTeam(props: any) {
 			})
 		}
 
+		// скрытие ошибок для инпутов после успешной отправки формы
 		inputs.forEach((input) => {
-			setForcedErrorMessage({name: input.name, isError: false})
+			setForcedErrorMessage({ name: input.name, isError: false })
 		})
 	}
 

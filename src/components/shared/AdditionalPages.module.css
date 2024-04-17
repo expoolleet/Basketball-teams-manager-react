@@ -10,7 +10,7 @@
 		flex-direction: column;
 		text-align: center;
 	}
-	
+
 	.figcaption span {
 		font-size: 16px;
 	}
@@ -43,7 +43,7 @@
 		font-size: 24px;
 	}
 
-    .figcaption * {
+	.figcaption * {
 		margin-bottom: 0px;
 	}
 

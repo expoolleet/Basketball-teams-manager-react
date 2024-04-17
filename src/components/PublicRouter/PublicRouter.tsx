@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { privateRoutes, publicRouters } from '../../utils/router'
 export default function PublicRouter() { // открытые пути (для неавторизированных пользователей)

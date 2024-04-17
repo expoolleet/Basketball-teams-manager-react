@@ -67,7 +67,8 @@ input::-ms-clear {
 	caret-color: rgba(0, 0, 0, 0.35);
 }
 
-.myInput input:hover ~ .date_icon, .date_icon:hover {
+.myInput input:hover ~ .date_icon,
+.date_icon:hover {
 	filter: invert(40%);
 }
 

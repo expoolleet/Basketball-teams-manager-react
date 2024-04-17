@@ -35,11 +35,10 @@ function App(): JSX.Element {
 
 	return (
 		<SelectedPlayerContext.Provider
-		value={{
-			selectedPlayer,
-			setSelectedPlayer
-		}}
-		>
+			value={{
+				selectedPlayer,
+				setSelectedPlayer,
+			}}>
 			<AuthContext.Provider
 				value={{
 					isAuth,

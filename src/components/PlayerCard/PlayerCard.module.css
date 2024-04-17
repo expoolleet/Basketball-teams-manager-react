@@ -1,5 +1,4 @@
 @media (min-width: 0px) {
-
 	.photo {
 		max-height: 150px;
 		max-width: 150px;
@@ -8,27 +7,25 @@
 }
 
 @media (min-width: 768px) {
-
 	.photo {
 		min-height: 210px;
-        max-height: 210px;
+		max-height: 210px;
 		max-width: 300px;
 		min-width: 300px;
-        margin-top: 10px;
+		margin-top: 10px;
 	}
 }
 
-.photo{
+.photo {
 	object-fit: contain;
 }
 
-.card{
+.card {
 	justify-content: flex-end;
 }
 
-
-.caption span{
-    color: #FF5761;
+.caption span {
+	color: #ff5761;
 }
 
 .caption h3 {

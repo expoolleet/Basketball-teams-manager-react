@@ -1,5 +1,4 @@
 @media (min-width: 0px) {
-
 	.logo {
 		max-height: 70px;
 		max-width: 70px;
@@ -9,22 +8,20 @@
 }
 
 @media (min-width: 768px) {
-
 	.logo {
 		max-height: 160px;
 		max-width: 160px;
 		margin-bottom: 120px;
 	}
-
 }
 
-.card{
+.card {
 	justify-content: center;
 }
 
-.caption{
+.caption {
 	bottom: 0;
-    position: absolute;
+	position: absolute;
 }
 
 .logo {

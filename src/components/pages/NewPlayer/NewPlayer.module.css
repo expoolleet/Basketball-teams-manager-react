@@ -1,6 +1,5 @@
 @media (min-width: 0px) {
-
-	.inputs{
+	.inputs {
 		width: calc(100vw - 25px);
 	}
 
@@ -41,16 +40,15 @@
 	width: 45%;
 }
 
-.short_inputs{
+.short_inputs {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	column-gap: 10%;
 }
 
-.short_inputs input{
+.short_inputs input {
 	width: 100%;
 }
-
 
 @keyframes reveal {
 	from {

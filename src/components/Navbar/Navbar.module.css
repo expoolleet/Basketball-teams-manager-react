@@ -84,7 +84,7 @@
 		background-size: contain;
 	}
 
-	.ham_menu:active{
+	.ham_menu:active {
 		animation: jump 0.3s;
 	}
 
@@ -97,7 +97,6 @@
 }
 
 @media (min-width: 768px) {
-
 	html {
 		overflow: hidden;
 	}
@@ -106,7 +105,7 @@
 		padding-top: 0px !important;
 	}
 
-	.navbar{
+	.navbar {
 		position: relative;
 	}
 
@@ -119,7 +118,7 @@
 		display: none;
 	}
 
-	.name{
+	.name {
 		padding: 0px;
 		margin-right: 10px;
 	}
@@ -149,7 +148,7 @@
 		flex-direction: column;
 	}
 
-	.signout{
+	.signout {
 		margin-right: 20px;
 	}
 
@@ -294,9 +293,9 @@
 
 @keyframes jump {
 	from {
-		transform: scale(0.8)
+		transform: scale(0.8);
 	}
-	to{
+	to {
 		transform: scale(1);
 	}
 }

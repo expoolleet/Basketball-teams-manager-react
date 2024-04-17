@@ -1,15 +1,13 @@
 @media (min-width: 0) {
-	.photo_input{
+	.photo_input {
 		height: 20vh;
 		width: 50vw;
 		margin: 20px 0 40px 0;
 	}
 }
 
-
-
 @media (min-width: 768px) {
-	.photo_input{
+	.photo_input {
 		width: 25vw;
 		height: 25vh;
 	}

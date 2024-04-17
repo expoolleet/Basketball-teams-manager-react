@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import classes from './Teams.module.css'
-import Search from '../../UI/Search/Search'
-import AddButton from '../../UI/AddButton/AddButton'
-import Pagination from '../../Pagination/Pagination'
-import Selector from '../../UI/Selector/Selector'
-import TeamCard from '../../TeamCard/TeamCard'
-import PageLoader from '../../UI/PageLoader/PageLoader'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { TeamContext } from '../../context/TeamContext'
-import { teamsList } from '../../../utils/teams'
-import NewTeam from '../NewTeam/NewTeam'
-import SelectedTeam from '../SelectedTeam/SelectedTeam'
-import shared from '../../shared/MainPages.module.css'
+import classes from './Teams.module.css' // Импорт стилей компонента
+import Search from '../../UI/Search/Search' // Импорт компонента поиска
+import AddButton from '../../UI/AddButton/AddButton' // Импорт компонента кнопки, позволяющая добавить новую команду
+import Pagination from '../../Pagination/Pagination' // Импорт компонента пагинации
+import Selector from '../../UI/Selector/Selector' // Импорт компонента селектора
+import TeamCard from '../../TeamCard/TeamCard' // Импорт компонента карточки команды
+import PageLoader from '../../UI/PageLoader/PageLoader' // Импорт компонента загрузчика страницы
+import { useLocation, useNavigate } from 'react-router-dom'  // Импорт хуков из роутера
+import { TeamContext } from '../../context/TeamContext' // Импорт контекста команды
+import { teamsList } from '../../../utils/teams' // Импорт списка команд для инициализации
+import NewTeam from '../NewTeam/NewTeam' // Импорт компонента новой команды
+import SelectedTeam from '../SelectedTeam/SelectedTeam' // Импорт компонента выбранной команды
+import shared from '../../shared/MainPages.module.css' // Импорт общих стилей
 
 const TEAMS = 'teams' // Ключ для команд в localStorage
 const TEAMS_STATE: string = 'teams' // Состояние отображения списка команд
@@ -29,33 +29,60 @@ export interface ITeam {
 	[key: string]: string
 }
 
-const itemsPerPage: number[] = [6, 12, 24]
+const itemsPerPage: number[] = [6, 12, 24] // Элементы селектора (максимальное количество отоброжаемых карточек на страницу)
 
 export default function Teams(): JSX.Element {
-	const navigate = useNavigate()
-	const location = useLocation()
+	const navigate = useNavigate() // Хук навигации
+	const location = useLocation() // Хук поисковой строки браузера
 
-	const [currentState, setCurrentState] = useState<string>(TEAMS_STATE)
-	const [totalPages, setTotalPages] = useState<number>(0)
-	const [currentPage, setCurrentPage] = useState<number>(0)
-	const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0])
-	const [teamsToRender, setTeamsToRender] = useState<ITeam[]>([])
-	const [filteredTeams, setFilteredTeams] = useState<ITeam[]>([])
-	const [filter, setFilter] = useState<string>('')
-	const [itemOffset, setItemOffset] = useState<number>(0)
-	const [isLoading, setIsLoading] = useState<boolean>(true)
-	const [editTeam, setEditTeam] = useState<ITeam>()
-	const [selectedTeam, setSelectedTeam] = useState<ITeam>({
-		logo: '',
-		division: '',
-		conference: '',
-		name: '',
-		year: '',
-	})
-	const [teams, setTeams] = useState<ITeam[]>([])
-	const [teamsCount, setTeamsCount] = useState<number>(0)
+  // currentState - текущее состояние компонента
+  const [currentState, setCurrentState] = useState<string>(TEAMS_STATE)
 
-	const [isBlur, setIsBlur] = useState<boolean>(true)
+  // totalPages - общее количество страниц (для пагинации)
+  const [totalPages, setTotalPages] = useState<number>(0)
+
+  // currentPage - текущая страница (для пагинации)
+  const [currentPage, setCurrentPage] = useState<number>(0) // Изначально первая страница
+
+  // currentAmountOfItemsPerPage - количество элементов на странице (для пагинации)
+  const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0]) // Первое значение из массива itemsPerPage
+
+  // teamsToRender - массив команд для отображения на текущей странице
+  const [teamsToRender, setTeamsToRender] = useState<ITeam[]>([])
+
+  // filteredTeams - массив отфильтрованных команд
+  const [filteredTeams, setFilteredTeams] = useState<ITeam[]>([])
+
+  // filter - строка фильтра для поиска команд
+  const [filter, setFilter] = useState<string>('')
+
+  // itemOffset - смещение для пагинации
+  const [itemOffset, setItemOffset] = useState<number>(0)
+
+  // isLoading - флаг загрузки данных
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  // editTeam - редактируемая команда
+  const [editTeam, setEditTeam] = useState<ITeam>()
+
+  // selectedTeam - выбранная команда
+  const [selectedTeam, setSelectedTeam] = useState<ITeam>({  // Объект с пустыми значениями для выбранной команды
+    logo: '',
+    division: '',
+    conference: '',
+    name: '',
+    year: '',
+  })
+
+  // teams - массив всех команд
+  const [teams, setTeams] = useState<ITeam[]>([])
+
+  // teamsCount - общее количество команд
+  const [teamsCount, setTeamsCount] = useState<number>(0)
+
+  // isBlur - флаг размытия
+  const [isBlur, setIsBlur] = useState<boolean>(true)
+
 
 	useEffect(() => {
 		setIsLoading(true)
