@@ -66,23 +66,13 @@ export default function Players(): JSX.Element {
 	//Состояние списка команд
 	const [teams, setTeams] = useState<string[]>([])
 
-	useEffect(() => {
-		const storage = localStorage.getItem('teams')
-
-		if (storage) {
-			const localTeams = JSON.parse(storage) as ITeam[]
-			const teams: string[] = []
-			localTeams.forEach((team) => {
-				teams.push(team.name)
-			})
-			setTeams(teams)
-		}
-	}, [])
-
 	// Определение состояния компонента в зависимости от текущего маршрута
 	useEffect(() => {
 		if (location.pathname === '/' + PLAYERS_STATE) setCurrentState(PLAYERS_STATE)
 		else if (location.pathname === '/' + NEW_PLAYER_STATE) setCurrentState(NEW_PLAYER_STATE)
+
+		// Загрузка команд из хранилища
+		LoadTeams()
 	}, [location])
 
 	// Загрузка состояния выбранного игрока, если это произошло из просмотра команды
@@ -98,6 +88,11 @@ export default function Players(): JSX.Element {
 			setPlayers(playersList)
 			localStorage.setItem(PLAYERS, JSON.stringify(playersList))
 		}
+
+		// Загрузка команд из хранилища
+		LoadTeams()
+
+		console.log(currentState)
 		setIsLoading(false)
 	}, [currentState]) // Зависимость от состояния, чтобы обновлять данные при переключении
 
@@ -133,6 +128,19 @@ export default function Players(): JSX.Element {
 		setPlayersToRender(Array.from(currentPlayers).slice(itemOffset, endOffset))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedTeams, filteredPlayers, currentState, itemOffset, currentAmountOfItemsPerPage])
+
+	// Метод, загружающий команды из хранилища
+	function LoadTeams(): void {
+		const storage = localStorage.getItem('teams')
+		if (storage) {
+			const localTeams = JSON.parse(storage) as ITeam[]
+			const teams: string[] = []
+			localTeams.forEach((team) => {
+				teams.push(team.name)
+			})
+			setTeams(teams)
+		}
+	}
 
 	// Обработчик ввода текста в поле поиска
 	function handleSearch(event: any): void {
