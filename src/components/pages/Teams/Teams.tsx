@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import classes from './Teams.module.css' // Импорт стилей компонента
-import Search from '../../UI/Search/Search' // Импорт компонента поиска
-import AddButton from '../../UI/AddButton/AddButton' // Импорт компонента кнопки, позволяющая добавить новую команду
-import Pagination from '../../Pagination/Pagination' // Импорт компонента пагинации
-import Selector from '../../UI/Selector/Selector' // Импорт компонента селектора
-import TeamCard from '../../TeamCard/TeamCard' // Импорт компонента карточки команды
-import PageLoader from '../../UI/PageLoader/PageLoader' // Импорт компонента загрузчика страницы
-import { useLocation, useNavigate } from 'react-router-dom'  // Импорт хуков из роутера
-import { TeamContext } from '../../context/TeamContext' // Импорт контекста команды
-import { teamsList } from '../../../utils/teams' // Импорт списка команд для инициализации
-import NewTeam from '../NewTeam/NewTeam' // Импорт компонента новой команды
-import SelectedTeam from '../SelectedTeam/SelectedTeam' // Импорт компонента выбранной команды
-import shared from '../../shared/MainPages.module.css' // Импорт общих стилей
+import classes from './Teams.module.css'
+import Search from '../../UI/Search/Search'
+import AddButton from '../../UI/AddButton/AddButton'
+import Pagination from '../../Pagination/Pagination'
+import Selector from '../../UI/Selector/Selector'
+import TeamCard from '../../TeamCard/TeamCard'
+import PageLoader from '../../UI/PageLoader/PageLoader'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { TeamContext } from '../../context/TeamContext'
+import { teamsList } from '../../../utils/teams'
+import NewTeam from '../NewTeam/NewTeam'
+import SelectedTeam from '../SelectedTeam/SelectedTeam'
+import shared from '../../shared/MainPages.module.css'
 
-const TEAMS = 'teams' // Ключ для команд в localStorage
-const TEAMS_STATE: string = 'teams' // Состояние отображения списка команд
-const SELECTED_TEAM_STATE: string = 'selected' // Состояние просмотра выбранной команды
-const NEW_TEAM_STATE: string = 'newteam' // Состояние создания новой команды
-const EDIT_EXIST_TEAM_STATE: string = 'edit' // Состояние редактирования существующей команды
+const TEAMS = 'teams'
+const TEAMS_STATE: string = 'teams'
+const SELECTED_TEAM_STATE: string = 'selected'
+const NEW_TEAM_STATE: string = 'newteam'
+const EDIT_EXIST_TEAM_STATE: string = 'edit'
 
-// Интерфейс для описания структуры данных команды
 export interface ITeam {
 	logo: string
 	division: string
@@ -29,60 +28,45 @@ export interface ITeam {
 	[key: string]: string
 }
 
-const itemsPerPage: number[] = [6, 12, 24] // Элементы селектора (максимальное количество отоброжаемых карточек на страницу)
+const itemsPerPage: number[] = [6, 12, 24]
 
-export default function Teams(): JSX.Element {
-	const navigate = useNavigate() // Хук навигации
-	const location = useLocation() // Хук поисковой строки браузера
+export default function Teams(): React.ReactElement {
+	const navigate = useNavigate()
+	const location = useLocation()
 
-  // currentState - текущее состояние компонента
-  const [currentState, setCurrentState] = useState<string>(TEAMS_STATE)
+	const [currentState, setCurrentState] = useState<string>(TEAMS_STATE)
 
-  // totalPages - общее количество страниц (для пагинации)
-  const [totalPages, setTotalPages] = useState<number>(0)
+	const [totalPages, setTotalPages] = useState<number>(0)
 
-  // currentPage - текущая страница (для пагинации)
-  const [currentPage, setCurrentPage] = useState<number>(0) // Изначально первая страница
+	const [currentPage, setCurrentPage] = useState<number>(0)
 
-  // currentAmountOfItemsPerPage - количество элементов на странице (для пагинации)
-  const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0]) // Первое значение из массива itemsPerPage
+	const [currentAmountOfItemsPerPage, setCurrentAmountOfItemsPerPage] = useState<number>(itemsPerPage[0])
 
-  // teamsToRender - массив команд для отображения на текущей странице
-  const [teamsToRender, setTeamsToRender] = useState<ITeam[]>([])
+	const [teamsToRender, setTeamsToRender] = useState<ITeam[]>([])
 
-  // filteredTeams - массив отфильтрованных команд
-  const [filteredTeams, setFilteredTeams] = useState<ITeam[]>([])
+	const [filteredTeams, setFilteredTeams] = useState<ITeam[]>([])
 
-  // filter - строка фильтра для поиска команд
-  const [filter, setFilter] = useState<string>('')
+	const [filter, setFilter] = useState<string>('')
 
-  // itemOffset - смещение для пагинации
-  const [itemOffset, setItemOffset] = useState<number>(0)
+	const [itemOffset, setItemOffset] = useState<number>(0)
 
-  // isLoading - флаг загрузки данных
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+	const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  // editTeam - редактируемая команда
-  const [editTeam, setEditTeam] = useState<ITeam>()
+	const [editTeam, setEditTeam] = useState<ITeam>()
 
-  // selectedTeam - выбранная команда
-  const [selectedTeam, setSelectedTeam] = useState<ITeam>({  // Объект с пустыми значениями для выбранной команды
-    logo: '',
-    division: '',
-    conference: '',
-    name: '',
-    year: '',
-  })
+	const [selectedTeam, setSelectedTeam] = useState<ITeam>({
+		logo: '',
+		division: '',
+		conference: '',
+		name: '',
+		year: '',
+	})
 
-  // teams - массив всех команд
-  const [teams, setTeams] = useState<ITeam[]>([])
+	const [teams, setTeams] = useState<ITeam[]>([])
 
-  // teamsCount - общее количество команд
-  const [teamsCount, setTeamsCount] = useState<number>(0)
+	const [teamsCount, setTeamsCount] = useState<number>(0)
 
-  // isBlur - флаг размытия
-  const [isBlur, setIsBlur] = useState<boolean>(true)
-
+	const [isBlur, setIsBlur] = useState<boolean>(true)
 
 	useEffect(() => {
 		setIsLoading(true)
@@ -93,9 +77,8 @@ export default function Teams(): JSX.Element {
 			localStorage.setItem(TEAMS, JSON.stringify(teamsList))
 		}
 		setIsLoading(false)
-	}, [currentState]) // Зависимость от состояния, чтобы обновлять данные при переключении
+	}, [currentState])
 
-	// Определение состояния компонента в зависимости от текущего маршрута
 	useEffect(() => {
 		if (location.pathname === '/') setCurrentState(TEAMS_STATE)
 		else if (location.pathname === '/' + NEW_TEAM_STATE) setCurrentState(NEW_TEAM_STATE)
@@ -201,17 +184,19 @@ export default function Teams(): JSX.Element {
 		setCurrentState(EDIT_EXIST_TEAM_STATE)
 	}
 
-	// Отображение компонента загрузчика, пока данные не загружены
 	if (isLoading) {
 		return <PageLoader />
 	}
 
-	// Функция для определения состояния в зависимости от значения currentState
-	function getState(currentState: string): JSX.Element {
+	function getState(currentState: string): React.ReactElement {
 		switch (currentState) {
 			case TEAMS_STATE:
 				return (
-					<div className={shared.container} onClick={() => {setIsBlur(true)}}>
+					<div
+						className={shared.container}
+						onClick={() => {
+							setIsBlur(true)
+						}}>
 						<div className={shared.header}>
 							<Search {...searchInput} onChange={handleSearch} value={filter} />
 							<AddButton

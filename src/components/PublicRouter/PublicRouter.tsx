@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { privateRoutes, publicRouters } from '../../utils/router'
-export default function PublicRouter() { // открытые пути (для неавторизированных пользователей)
+export default function PublicRouter(): React.ReactElement {
+	// открытые пути (для неавторизированных пользователей)
 	return (
 		<Routes>
 			{publicRouters.map((route) => (

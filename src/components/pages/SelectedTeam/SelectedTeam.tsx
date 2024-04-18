@@ -14,20 +14,16 @@ interface ISelectedTeamProps {
 	selectedTeam: ITeam
 }
 
-export default function SelectedTeam(props: any) {
+export default function SelectedTeam(props: any): React.ReactElement {
 	const { logo, division, conference, name, year }: ITeam = props.selectedTeam
 	const { editTeam, deleteTeam, selectedTeam }: ISelectedTeamProps = props
 
-	// Контекст выбранного игрока
 	const { setSelectedPlayer } = useContext(SelectedPlayerContext)
 
-	// Состояние состава команды
 	const [roster, setRoster] = useState<IPlayer[]>()
 
-	// Состояние модального окна
 	const [modal, setModal] = useState<boolean>(false)
 
-	// Хук навигации
 	const navigate = useNavigate()
 
 	// Обработчик удаления команды
@@ -36,7 +32,7 @@ export default function SelectedTeam(props: any) {
 	}
 
 	// Автоматическое пролистывание наверх (для мобильных устройств)
-	window.scrollTo(0, 0);
+	window.scrollTo(0, 0)
 
 	useEffect(() => {
 		const storage = localStorage.getItem('players')

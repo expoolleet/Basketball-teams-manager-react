@@ -8,7 +8,7 @@ interface IButtonProps {
 
 const BUTTON_STYLE_GRAY: string = 'gray'
 
-export default function MyButton(props: any): JSX.Element {
+export default function MyButton(props: any): React.ReactElement {
 	const { isButtonDisabled, styleType, ...buttonProps } = props as IButtonProps
 
 	let buttonStyle: string

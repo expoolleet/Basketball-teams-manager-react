@@ -1,44 +1,34 @@
-// Импорт необходимых компонентов и библиотек
 import React, { useContext, useEffect, useState } from 'react'
 import classes from './Navbar.module.css'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import SignOut from '../SignOut/SignOut'
 import { AuthContext } from '../context/AuthContext'
 
-// Типы для стилизации ссылок и иконок
 type SelectedLink = { color: string }
 type SelectedIcon = { backgroundColor: string }
 
-// Функциональный компонент Navbar
-export default function Navbar(): JSX.Element {
-	// Получение информации о текущем URL-адресе и функции навигации
+export default function Navbar(): React.ReactElement {
 	const location = useLocation()
-	const navigate = useNavigate()
 
-	// Состояние для управления видимостью меню на мобильных устройствах
 	const [isMobileMenuOpened, setIsMobileMenuOpened] = useState<boolean>(false)
 	const [showMobileMenu, setMobileMenu] = useState<string>('')
 
 	const show: string = classes.show
 	const hide: string = classes.hide
 
-	// Управление видимостью мобильного меню и свойством overflow
 	useEffect(() => {
 		setMobileMenu(isMobileMenuOpened ? show : hide)
-		document.documentElement.style.setProperty('--mobile_overflow', isMobileMenuOpened ? 'hidden' : 'auto')	
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isMobileMenuOpened]) // Эффект запускается при изменении isMenuHidden
+		document.documentElement.style.setProperty('--mobile_overflow', isMobileMenuOpened ? 'hidden' : 'auto')
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMobileMenuOpened])
 
-	// Скрытие меню при изменении URL-адреса
 	useEffect(() => {
 		setIsMobileMenuOpened(false)
-	}, [location]) // Эффект запускается при изменении location
+	}, [location])
 
-	// Массивы путей для команд и игроков
 	const forTeams = ['/', '/newteam']
 	const forPlayers = ['/players', '/newplayer']
 
-	// Получение имени авторизованного пользователя
 	const { authName } = useContext(AuthContext)
 
 	// Функция для проверки, находится ли текущий путь в заданном массиве путей
@@ -68,19 +58,20 @@ export default function Navbar(): JSX.Element {
 
 				<Link to='/' className={classes.logo} />
 				<span className={[classes.profile, showMobileMenu].join(' ')}>
-					<span
-						onClick={() => {
-							navigate('/profile')
-						}}
-						className={classes.name}>
-						{authName === null ? 'John Smith' : authName}
-					</span>
-					<Link to='/profile' id='link' className={classes.icon} />
+					<span className={classes.name}>{authName === null ? 'John Smith' : authName}</span>
+					<span className={classes.icon} />
 				</span>
 			</header>
 
-			<div className={[classes.menu, showMobileMenu].join(' ')} onClick={() => {setIsMobileMenuOpened(false)}}>
-				<ul onClick={(e) => {e.stopPropagation()}}>
+			<div
+				className={[classes.menu, showMobileMenu].join(' ')}
+				onClick={() => {
+					setIsMobileMenuOpened(false)
+				}}>
+				<ul
+					onClick={(e) => {
+						e.stopPropagation()
+					}}>
 					<li>
 						<Link to='/' className={classes.teams} style={linkStyles(forTeams)}>
 							<div className={classes.teams_icon} style={iconStyles(forTeams)} />

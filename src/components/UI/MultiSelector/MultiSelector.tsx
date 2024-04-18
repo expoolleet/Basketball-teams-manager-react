@@ -11,7 +11,7 @@ interface IMultiSelectorProps {
 
 const delayMS: number = 200
 
-export default function MultiSelector(props: any) {
+export default function MultiSelector(props: any): React.ReactElement {
 	const { selectedItems, items, setSelectedPositions, onChahgedSelectorItems }: IMultiSelectorProps =
 		props
 	const [itemsClass, setItemsClass] = useState<string>(classes.items_hide)
@@ -35,7 +35,6 @@ export default function MultiSelector(props: any) {
 	let placeholder: string = ''
 
 	if (selectedItems.length === 0) {
-		// настройки селектора по умолчанию
 		remove_items_icon = ''
 		multiSelector = classes.multiselector
 		placeholder = 'Select...'
@@ -86,7 +85,7 @@ export default function MultiSelector(props: any) {
 		setSelectedPositions([])
 	}
 
-	const itemsToRender: string[] = [] // фильтры селектора, которые будут выводиться (в зависимости от длины элемента)
+	const itemsToRender: string[] = []
 	const offset: number = 110
 	const letterWidth: number = 10
 	let width: number = 0

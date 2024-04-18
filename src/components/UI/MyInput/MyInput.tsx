@@ -27,7 +27,7 @@ export const PASSWORD_TYPE: string = 'password'
 
 export const DATE_TYPE: string = 'date'
 
-export default function MyInput(props: any): JSX.Element {
+export default function MyInput(props: any): React.ReactElement {
 	const { name, selectProps, errorMessage, forcedErrorMessage, label, ...inputProps } = props as IInputProps
 	const inputType = props.type
 
@@ -81,13 +81,13 @@ export default function MyInput(props: any): JSX.Element {
 		setDateInputType(DATE_TYPE)
 	}
 
-	let errorSpan: JSX.Element
+	let errorSpan: React.ReactElement
 	if (forcedErrorMessage && forcedErrorMessage.isError && forcedErrorMessage.name === name)
 		errorSpan = <span className={classes.error_message_show}>{errorMessage}</span>
 	else if (type === SELECT_TYPE) errorSpan = <span className={classes.error_message_disable}>{errorMessage}</span>
 	else errorSpan = <span className={classes.error_message}>{errorMessage}</span>
 
-	function getInputByType(type: string) {
+	function getInputByType(type: string): React.ReactElement {
 		switch (inputType) {
 			case SELECT_TYPE:
 				return (

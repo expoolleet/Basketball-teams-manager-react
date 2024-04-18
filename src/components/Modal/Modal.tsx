@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import classes from './Modal.module.css'
 
 interface IModalProps {
@@ -8,7 +8,7 @@ interface IModalProps {
 	setVisible(flag: boolean): any
 }
 
-export default function Modal(props: any) {
+export default function Modal(props: any): React.ReactElement {
 	const { visible, setVisible, header, children }: IModalProps = props
 
 	const modalClass: string[] = [classes.modal_container]

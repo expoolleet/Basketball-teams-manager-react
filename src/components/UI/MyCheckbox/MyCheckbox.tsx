@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import classes from './MyCheckbox.module.css'
 
 interface ICheckboxProps {
@@ -10,9 +10,8 @@ interface ICheckboxProps {
 	setIsChecked(flag: boolean): any
 }
 
-export default function MyCheckbox(props: any): JSX.Element {
-	const { children, errorMessage, isErrorMessageForced, isChecked, setIsChecked, ...checkboxProps } =
-		props as ICheckboxProps
+export default function MyCheckbox(props: any): React.ReactElement {
+	const { children, errorMessage, isErrorMessageForced, isChecked, setIsChecked } = props as ICheckboxProps
 
 	const checkboxClasses = [classes.checkbox]
 	const textClasses = [classes.text]

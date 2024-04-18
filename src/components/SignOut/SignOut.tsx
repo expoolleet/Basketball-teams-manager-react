@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import classes from './SignOut.module.css'
 import { AuthContext } from '../context/AuthContext'
 
-export default function SignOut() {
+export default function SignOut(): React.ReactElement {
 
     const {setIsAuth} = useContext(AuthContext) // контекст авторизации
 

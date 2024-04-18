@@ -6,7 +6,7 @@ import Players from '../components/pages/Players/Players'
 
 interface IRoutesProps {
 	path: string
-	element: () => JSX.Element
+	element: () => React.ReactElement
 }
 
 export const privateRoutes: IRoutesProps[] = [

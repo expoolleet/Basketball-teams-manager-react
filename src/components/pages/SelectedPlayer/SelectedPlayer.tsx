@@ -12,7 +12,7 @@ interface ISelectedPlayerProps {
 	selectedPlayer: IPlayer
 }
 
-export default function SelectedPlayer(props: any) {
+export default function SelectedPlayer(props: any): React.ReactElement {
 	const { photo, name, position, team, height_cm, weight_kg, birthday, number }: IPlayer = props.selectedPlayer
 	const { editPlayer, deletePlayer, selectedPlayer }: ISelectedPlayerProps = props
 

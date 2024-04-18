@@ -8,19 +8,17 @@ import MyCheckbox from '../../UI/MyCheckbox/MyCheckbox'
 import Notification from '../../Notification/Notification'
 import { AuthContext } from '../../context/AuthContext'
 
-
-// Интерфейс для данных формы регистрации
 interface ISignUpValues {
 	name: string
 	login: string
 	password: string
 	confirmPassword: string
-	[key: string]: string // Разрешение дополнительных свойств
+	[key: string]: string
 }
 
 const timeoutMS: number = 3000
 
-export default function SignUp(): JSX.Element {
+export default function SignUp(): React.ReactElement {
 	const [isSignupError, setIsSignupError] = useState<boolean>(false)
 	const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
 	const [errorMessage, setErrorMessage] = useState<string>('')
@@ -36,8 +34,6 @@ export default function SignUp(): JSX.Element {
 		password: '',
 		confirmPassword: '',
 	})
-
-	
 
 	// Описание полей ввода для формы
 	const inputs = [
@@ -75,15 +71,12 @@ export default function SignUp(): JSX.Element {
 	function submitForm(event: any): void {
 		event.preventDefault()
 
-		if ((values.name === '' || values.login === '' || values.password === '' || values.confirmPassword === ''))
-		{
+		if (values.name === '' || values.login === '' || values.password === '' || values.confirmPassword === '') {
 			sendError('Some inputs are missing data')
 			return
 		}
 
-
-		if (localStorage.getItem(values.login))
-		{
+		if (localStorage.getItem(values.login)) {
 			sendError('This login is unavailable')
 			return
 		}
@@ -95,28 +88,23 @@ export default function SignUp(): JSX.Element {
 			return
 		}
 
-		const jsonString = JSON.stringify(values) // Converting SignUpValues to JSON data
-
-		console.log(jsonString) // testing
-
 		localStorage.setItem(values.login, values.password)
 		localStorage.setItem(`${values.login}.name`, values.name)
 		localStorage.setItem('auth', 'true')
 		localStorage.setItem('lastLogin', values.login)
 		setIsAuth(true)
 		setAuthName(values.name)
-
 	}
 
-	function sendError(error: string) : void {
+	function sendError(error: string): void {
 		setErrorMessage(error)
 		setIsSignupError(true)
-		setTimeout(() => {	
+		setTimeout(() => {
 			setIsSignupError(false)
 		}, timeoutMS)
 	}
 
-  	// Функция для обработки изменения значений полей ввода
+	// Функция для обработки изменения значений полей ввода
 	function onChangeInput(event: any): void {
 		setValues({ ...values, [event.target.name]: event.target.value })
 	}
@@ -136,7 +124,11 @@ export default function SignUp(): JSX.Element {
 							onChange={onChangeInput}
 						/>
 					))}
-					<MyCheckbox isChecked={isChecked} setIsChecked={setIsChecked} isErrorMessageForced={isCheckBoxError}  errorMessage='You must be accept the agreement.'>
+					<MyCheckbox
+						isChecked={isChecked}
+						setIsChecked={setIsChecked}
+						isErrorMessageForced={isCheckBoxError}
+						errorMessage='You must be accept the agreement.'>
 						I accept the agreement
 					</MyCheckbox>
 					<MyButton isButtonDisabled={isButtonDisabled}>Sign Up</MyButton>

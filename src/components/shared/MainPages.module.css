@@ -3,10 +3,11 @@
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: auto 1fr auto;
+		overflow-x: hidden;
 	}
 
 	.header {
-		padding: 15px 15px 0 15px;
+		padding: 15px 45px 0 15px;
 		flex-direction: column;
 		align-items: flex-start;
 		justify-content: center;
@@ -20,17 +21,22 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 		margin-left: 15px;
-		margin-right: 15px;
+		margin-right: 45px;
 		column-gap: 15px;
 		row-gap: 15px;
 	}
 
 	.footer ul {
-		margin: 0 15px;
+		margin-left: 15px;
 	}
 
 	.footer span {
-		margin: 0 15px;
+		margin-left: 15px;
+	}
+
+	.footer ul + * span {
+		margin-right: 45px;
+		margin-left: 0px;
 	}
 }
 
@@ -83,7 +89,12 @@
 	}
 
 	.footer span {
-		margin: 0 70px;
+		margin-left: 70px;
+	}
+
+	.footer ul + * span {
+		margin-right: 70px;
+		margin-left: 0px;
 	}
 }
 

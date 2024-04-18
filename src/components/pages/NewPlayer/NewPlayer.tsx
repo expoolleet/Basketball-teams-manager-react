@@ -1,10 +1,5 @@
-// Импорт необходимых компонентов из React
 import React, { useContext, useEffect, useRef, useState } from 'react'
-
-// Импорт стилей из файла NewTeam.module.css
 import classes from './NewPlayer.module.css'
-
-// Импорт компонентов из других модулей
 import { Link, useNavigate } from 'react-router-dom'
 import MyInput, { SELECT_TYPE } from '../../UI/MyInput/MyInput'
 import MyButton from '../../UI/MyButton/MyButton'
@@ -16,13 +11,11 @@ import { PlayerContext } from '../../context/PlayerContext'
 import { SELECTOR_INPUT_TYPE } from '../../UI/Selector/Selector'
 import { ErrorMessageType } from '../../UI/MyInput/MyInput'
 
-// Константа для таймаута уведомления
 const timeoutMS: number = 3000
 
-// Интерфейс для описания свойств компонента NewPlayer
 interface INewPlayerProps {
-	editPlayer: IPlayer // Редактируемый игрок (если режим редактирования)
-	isEditPlayer: boolean // Флаг режима редактирования
+	editPlayer: IPlayer
+	isEditPlayer: boolean
 }
 
 export type SelectPropsType = {
@@ -36,43 +29,33 @@ export type SelectPropsType = {
 
 const positions: string[] = ['Center Forward', 'Guard Forward', 'Forward', 'Center', 'Guard', 'Forward-Center']
 
-// Функциональный компонент NewPlayer
-export default function NewPlayer(props: any) {
-	// Деструктуризация параметров props
+export default function NewPlayer(props: any): React.ReactElement {
 	const { editPlayer, isEditPlayer }: INewPlayerProps = props
 
-	// Хук useNavigate для перехода по маршрутам
 	const navigate = useNavigate()
 
-	// Получение команд и функции для их обновления из контекста PlayerContext
 	const { players, setPlayers, teams } = useContext(PlayerContext)
 
-	// Ссылка на элемент для загрузки изображения команды
 	const uploadRef = useRef<HTMLInputElement>(null)
 
 	// Состояния для управления изображением игрока
 	const [photo, setPhoto] = useState<any>()
 	const [photoUrl, setPhotoUrl] = useState<string>('')
 
-	// Состояния для управления уведомлением
 	const [isNotificationVisible, setIsNotificationVisible] = useState<boolean>(false)
 	const [notificationMessage, setNotificationMessage] = useState<string>('')
 	const [notificationType, setNotificationType] = useState<string>('')
 
-	// Состояния для сохранения выбранных элементов селекторов
 	const [selectedPosition, setSelectedPosition] = useState<string>('')
 	const [selectedTeam, setSelectedTeam] = useState<string>('')
 
-	// Состояние насильной ошибки
 	const [forcedErrorMessage, setForcedErrorMessage] = useState<ErrorMessageType>({
 		name: '',
 		isError: false,
 	})
 
-	// Состояние расфокуса селектора
 	const [isBlur, setIsBlur] = useState<boolean>(true)
 
-	// Состояние для хранения данных игрока
 	const [values, setValues] = useState<IPlayer>(
 		isEditPlayer
 			? editPlayer // Данные редактируемого игрока
@@ -96,7 +79,6 @@ export default function NewPlayer(props: any) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isEditPlayer])
 
-	// Описание полей формы для создания/редактирования команды
 	const inputsFirstPart = [
 		{
 			type: 'text',

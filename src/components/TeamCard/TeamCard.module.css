@@ -1,17 +1,32 @@
 @media (min-width: 0px) {
 	.logo {
-		max-height: 70px;
-		max-width: 70px;
+		max-height: 80px;
 		margin-bottom: 115px;
 		margin-top: 20px;
 	}
 }
 
+@media (min-height: 0px) {
+	.logo {
+		margin-top: 10px;
+		margin-bottom: 95px;
+	}
+}
+
+@media (min-height: 730px) {
+	.logo {
+		margin-top: 20px;
+		margin-bottom: 120px;
+	}
+}
+
 @media (min-width: 768px) {
 	.logo {
-		max-height: 160px;
-		max-width: 160px;
-		margin-bottom: 120px;
+		min-height: 30%;
+		min-width: 30%;
+		max-height: 50%;
+		max-width: 50%;
+		margin-top: 0;
 	}
 }
 
@@ -26,6 +41,7 @@
 
 .logo {
 	padding: 5px 9px;
+	object-fit: contain;
 }
 
 .caption h3 {

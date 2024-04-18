@@ -2,7 +2,6 @@ import React from 'react'
 import classes from './TeamCard.module.css'
 import shared from '../shared/Card.module.css'
 
-// интерфейс карточки команды
 interface ITeamCardProps {
 	logo: string
 	name: string
@@ -10,7 +9,7 @@ interface ITeamCardProps {
 	onClick(name: string): any
 }
 
-export default function TeamCard(props: any) {
+export default function TeamCard(props: any): React.ReactElement {
 	const { logo, name, year, onClick } = props as ITeamCardProps // деструктизация параметров
 
 	return (
@@ -19,7 +18,7 @@ export default function TeamCard(props: any) {
 			onClick={() => {
 				onClick(name)
 			}}>
-			<img draggable='false' src={logo} alt={name} className={classes.logo} />
+			<img draggable='false' src={logo} alt={name} className={classes.logo} loading='lazy' />
 			<figcaption className={[shared.caption, classes.caption].join(' ')}>
 				<h3>{name}</h3>
 				<h5>Year of foundation: {year}</h5>

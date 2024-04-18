@@ -1,6 +1,6 @@
 import classes from './Error.module.css'
 
-export default function Error() {
+export default function Error(): React.ReactElement {
 	// компонент ошибки 404
 	return (
 		<div className={classes.error}>

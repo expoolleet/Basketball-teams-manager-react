@@ -6,7 +6,7 @@ interface IAddButtonProps{
   onClick() : any
 }
 
-export default function AddButton(props: any) {
+export default function AddButton(props: any): React.ReactElement {
 
   const {onClick} = props as IAddButtonProps 
 

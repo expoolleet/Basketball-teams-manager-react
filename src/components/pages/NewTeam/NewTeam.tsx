@@ -1,65 +1,48 @@
-// Импорт необходимых компонентов из React
 import React, { useContext, useEffect, useRef, useState } from 'react'
-
-// Импорт стилей из файла NewTeam.module.css
 import classes from './NewTeam.module.css'
-
-// Импорт компонентов из других модулей
 import { Link, useNavigate } from 'react-router-dom'
-import MyInput from '../../UI/MyInput/MyInput' // Импорт компонента инпута
-import MyButton from '../../UI/MyButton/MyButton' // Импорт компонента кнопки
-import PhotoInput from '../../UI/PhotoInput/PhotoInput' // Импорт компонента для загрузки изображений
-import { ITeam } from '../Teams/Teams' // Импорт интерфейса команды из Teams
-import { TeamContext } from '../../context/TeamContext' // Импорт контекста команд
-import Notification from '../../Notification/Notification' // Импорт компонента уведомлений
-import shared from '../../shared/AdditionalPages.module.css' // Импорт общих стилей
-import { ErrorMessageType } from '../../UI/MyInput/MyInput' // Импорт типа ошибки
+import MyInput from '../../UI/MyInput/MyInput'
+import MyButton from '../../UI/MyButton/MyButton'
+import PhotoInput from '../../UI/PhotoInput/PhotoInput'
+import { ITeam } from '../Teams/Teams'
+import { TeamContext } from '../../context/TeamContext'
+import Notification from '../../Notification/Notification'
+import shared from '../../shared/AdditionalPages.module.css'
+import { ErrorMessageType } from '../../UI/MyInput/MyInput'
 
-// Константа для таймаута уведомления
 const timeoutMS: number = 3000
 
-// Получение текущего года
 const currentYear = new Date().getFullYear()
 
-// Интерфейс для описания свойств компонента NewTeam
 interface INewTeamProps {
-	editTeam: ITeam // Редактируемая команда (если режим редактирования)
-	isEditTeam: boolean // Флаг режима редактирования
+	editTeam: ITeam
+	isEditTeam: boolean
 }
 
-// Функциональный компонент NewTeam
-export default function NewTeam(props: any) {
-	// Деструктуризация параметров props
+export default function NewTeam(props: any): React.ReactElement {
 	const { editTeam, isEditTeam }: INewTeamProps = props
 
-	// Хук useNavigate для перехода по маршрутам
 	const navigate = useNavigate()
 
-	// Получение команд и функции для их обновления из контекста TeamContext
 	const { teams, setTeams } = useContext(TeamContext)
 
-	// Ссылка на элемент для загрузки изображения команды
 	const uploadRef = useRef<HTMLInputElement>(null)
 
-	// Состояния для управления изображением команды
 	const [photo, setPhoto] = useState<any>()
 	const [photoUrl, setPhotoUrl] = useState<string>('')
 
-	// Состояния для управления уведомлением
 	const [isNotificationVisible, setIsNotificationVisible] = useState<boolean>(false)
 	const [notificationMessage, setNotificationMessage] = useState<string>('')
 	const [notificationType, setNotificationType] = useState<string>('')
 
-	// Состояние насильной ошибки
 	const [forcedErrorMessage, setForcedErrorMessage] = useState<ErrorMessageType>({
 		name: '',
 		isError: false,
 	})
 
-	// Состояние для хранения данных команды
 	const [values, setValues] = useState<ITeam>(
 		isEditTeam
-			? editTeam // Данные редактируемой команды
+			? editTeam
 			: {
 					logo: '/portraits/team-placeholder.png', // Логотип команды по умолчанию
 					name: '',
@@ -69,14 +52,13 @@ export default function NewTeam(props: any) {
 			  }
 	)
 
-	// Описание полей формы для создания/редактирования команды
 	const inputs = [
 		{
 			type: 'text',
 			name: 'name',
 			label: 'Name',
-			errorMessage: 'Name should be 3-30 characters without any special symbol', // Ошибка названия
-			pattern: `^[A-Za-z0-9 ]{3,30}$`, // Регулярное выражение
+			errorMessage: 'Name should be 3-30 characters without any special symbol',
+			pattern: `^[A-Za-z0-9 ]{3,30}$`,
 		},
 		{
 			type: 'text',
@@ -97,7 +79,7 @@ export default function NewTeam(props: any) {
 			name: 'year',
 			label: 'Year of foundation',
 			errorMessage: `Please enter year between 1900 and ${currentYear}`,
-			placeholder: `${currentYear}`, // Плейсхолдер для года основания
+			placeholder: `${currentYear}`,
 		},
 	]
 
@@ -166,8 +148,7 @@ export default function NewTeam(props: any) {
 			setForcedErrorMessage({ name: 'year', isError: true })
 			return
 		}
-
-		// Подготовка нового списка команд
+		
 		let newTeamsList: ITeam[] = []
 		const newValues = {
 			logo: values.logo,

@@ -9,7 +9,7 @@ interface IPaginationProps {
 	paginationProps: any
 }
 
-export default function Pagination(props: any) {
+export default function Pagination(props: any): React.ReactElement {
 	const { totalPages, onPageChange, currentPage } = props as IPaginationProps
 
 	return (

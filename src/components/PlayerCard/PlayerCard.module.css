@@ -1,4 +1,12 @@
-@media (min-width: 0px) {
+@media (min-width: 0px) and (min-height: 0px) {
+	.photo {
+		max-width: 40%;
+		max-height: 40%;
+		margin-top: 10px;
+	}
+}
+
+@media (min-width: 0px) and (min-height: 730px) {
 	.photo {
 		max-height: 150px;
 		max-width: 150px;
@@ -6,18 +14,20 @@
 	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (min-height: 730px) {
 	.photo {
-		min-height: 210px;
-		max-height: 210px;
-		max-width: 300px;
-		min-width: 300px;
+		width: 100%;
+		min-height: 10%;
+		min-width: 10%;
+		max-height: 60%;
+		max-width: 60%;
 		margin-top: 10px;
 	}
 }
 
 .photo {
 	object-fit: contain;
+	animation: all 0.3s ease-in-out;
 }
 
 .card {

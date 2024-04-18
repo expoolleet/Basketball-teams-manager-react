@@ -15,7 +15,7 @@ const delayMS: number = 200
 export const SELECTOR_INPUT_TYPE = 'input'
 export const SELECTOR_PAGE_TYPE = 'page'
 
-export default function Selector(props: any) {
+export default function Selector(props: any): React.ReactElement {
 	const { items, isBlur, setIsBlur, selectedItem, type, onChange } = props as ISelectorProps
 
 	const [itemsClass, setItemsClass] = useState<string>(classes.items_hide)

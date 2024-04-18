@@ -9,7 +9,7 @@ import PublicRouter from './components/PublicRouter/PublicRouter'
 import { IPlayer } from './components/pages/Players/Players'
 import { SelectedPlayerContext } from './components/context/SelectedPlayerContext'
 
-function App(): JSX.Element {
+function App(): React.ReactElement {
 	const [isAuth, setIsAuth] = useState<boolean>(false)
 	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const [authName, setAuthName] = useState<string>('')

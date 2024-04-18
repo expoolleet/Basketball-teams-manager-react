@@ -8,16 +8,15 @@ import Notification from '../../Notification/Notification'
 import { AuthContext } from '../../context/AuthContext'
 import { ErrorMessageType } from '../../UI/MyInput/MyInput'
 
-// Интерфейс для данных формы авторизации
 interface ISigninValues {
 	login: string
 	password: string
-	[key: string]: string // Разрешаем дополнительные свойства
+	[key: string]: string
 }
 
-const timeoutMS: number = 3000 // Константа для таймаута уведомлений
+const timeoutMS: number = 3000
 
-export default function SignIn(): JSX.Element {
+export default function SignIn(): React.ReactElement {
 	const { setIsAuth, setAuthName } = useContext(AuthContext)
 	const [isSigninError, setIsSigninError] = useState<boolean>(false)
 	const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
@@ -28,19 +27,16 @@ export default function SignIn(): JSX.Element {
 		localStorage.setItem('admin', 'admin')
 	}, [])
 
-	// Состояние для хранения значений формы
 	const [values, setValues] = useState<ISigninValues>({
 		login: '',
 		password: '',
 	})
 
-	// Состояние насильной ошибки
 	const [forcedErrorMessage, setForcedErrorMessage] = useState<ErrorMessageType>({
 		name: '',
 		isError: false,
 	})
 
-	// Массив для описания полей ввода
 	const inputs = [
 		{
 			name: 'login',
@@ -74,14 +70,10 @@ export default function SignIn(): JSX.Element {
 			return
 		}
 
-		const jsonString = JSON.stringify(values)
-
-		console.log(jsonString) // тест
-
 		if (localStorage.getItem(values.login) == null) {
 			sendError('User with the specified username / password was not found')
 		} else if (localStorage.getItem(values.login) !== values.password) {
-			setForcedErrorMessage({name: 'password', isError: true})
+			setForcedErrorMessage({ name: 'password', isError: true })
 		} else {
 			setIsAuth(true)
 			setAuthName(localStorage.getItem(`${values.login}.name`) as string)

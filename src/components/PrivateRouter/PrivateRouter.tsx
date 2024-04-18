@@ -1,8 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { privateRoutes, publicRouters } from '../../utils/router'
-export default function PrivateRouter() { // частные пути (для авторизованных пользователей)
+export default function PrivateRouter(): React.ReactElement {
+	// частные пути (для авторизованных пользователей)
 	return (
-		<Routes> /
+		<Routes>
+			{' '}
+			/
 			{privateRoutes.map((route) => (
 				<Route key={route.path} path={route.path} element={route.element()} />
 			))}
