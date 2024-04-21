@@ -3,19 +3,21 @@ import classes from './NewPlayer.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import MyInput, { SELECT_TYPE } from '../../UI/MyInput/MyInput'
 import MyButton from '../../UI/MyButton/MyButton'
-import PhotoInput from '../../UI/PhotoInput/PhotoInput'
+import ImageInput from '../../UI/ImageInput/ImageInput'
 import Notification from '../../Notification/Notification'
 import shared from '../../shared/AdditionalPages.module.css'
 import { IPlayer } from '../Players/Players'
 import { PlayerContext } from '../../context/PlayerContext'
 import { SELECTOR_INPUT_TYPE } from '../../UI/Selector/Selector'
 import { ErrorMessageType } from '../../UI/MyInput/MyInput'
+import axios from 'axios'
 
 const timeoutMS: number = 3000
 
 interface INewPlayerProps {
 	editPlayer: IPlayer
 	isEditPlayer: boolean
+	setEditPlayer(player: IPlayer): any
 }
 
 export type SelectPropsType = {
@@ -30,21 +32,19 @@ export type SelectPropsType = {
 const positions: string[] = ['Center Forward', 'Guard Forward', 'Forward', 'Center', 'Guard', 'Forward-Center']
 
 export default function NewPlayer(props: any): React.ReactElement {
-	const { editPlayer, isEditPlayer }: INewPlayerProps = props
+	const { setEditPlayer, editPlayer, isEditPlayer }: INewPlayerProps = props
 
 	const navigate = useNavigate()
 
 	const { players, setPlayers, teams } = useContext(PlayerContext)
 
-	const uploadRef = useRef<HTMLInputElement>(null)
-
-	// Состояния для управления изображением игрока
-	const [photo, setPhoto] = useState<any>()
-	const [photoUrl, setPhotoUrl] = useState<string>('')
+	const [photoRaw, setPhotoRaw] = useState<any>()
 
 	const [isNotificationVisible, setIsNotificationVisible] = useState<boolean>(false)
 	const [notificationMessage, setNotificationMessage] = useState<string>('')
 	const [notificationType, setNotificationType] = useState<string>('')
+
+	const [inputImageBackround, setInputImageBackround] = useState<string>()
 
 	const [selectedPosition, setSelectedPosition] = useState<string>('')
 	const [selectedTeam, setSelectedTeam] = useState<string>('')
@@ -56,11 +56,13 @@ export default function NewPlayer(props: any): React.ReactElement {
 
 	const [isBlur, setIsBlur] = useState<boolean>(true)
 
+	const placeholder: string = '/photos/placeholder.png'
+
 	const [values, setValues] = useState<IPlayer>(
 		isEditPlayer
 			? editPlayer // Данные редактируемого игрока
 			: {
-					photo: '/photos/placeholder.png',
+					photo: '',
 					name: '',
 					position: '',
 					team: '',
@@ -72,12 +74,12 @@ export default function NewPlayer(props: any): React.ReactElement {
 	)
 
 	useEffect(() => {
-		if (isEditPlayer) {
+		if (editPlayer) {
 			setSelectedTeam(editPlayer.team)
 			setSelectedPosition(editPlayer.position)
+			setInputImageBackround(editPlayer.photo)
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isEditPlayer])
+	}, [editPlayer])
 
 	const inputsFirstPart = [
 		{
@@ -154,8 +156,12 @@ export default function NewPlayer(props: any): React.ReactElement {
 		values['team'] = team
 	}
 
-	function openPhoto(event: any): void {
-		setPhoto(event.target.files[0])
+	function openPhoto(photo: any): void {
+		setPhotoRaw(photo)
+
+		const photoUrl = URL.createObjectURL(photo)
+
+		setInputImageBackround(photoUrl)
 	}
 
 	function sendNotification(message: string, type: string): void {
@@ -168,14 +174,12 @@ export default function NewPlayer(props: any): React.ReactElement {
 	}
 
 	// Функция-обработчик submit формы создания/редактирования игрока
-	function onFormSumbit(event: any): void {
+	async function onFormSumbit(event: any): Promise<void> {
 		event.preventDefault()
-
-		console.log(values)
 
 		// Проверка заполненности полей
 		for (const key in values) {
-			if (values[key] === '') {
+			if (values[key] === '' && key !== 'photo') {
 				sendNotification('Some inputs are missing data', 'error')
 				return
 			}
@@ -203,59 +207,96 @@ export default function NewPlayer(props: any): React.ReactElement {
 			return
 		}
 
-		// Подготовка нового списка команд
-		let newPlayersList: IPlayer[] = []
-		const newValues = {
-			photo: values.photo,
-			name: values.name,
-			position: values.position,
-			team: values.team,
-			height_cm: values.height_cm,
-			weight_kg: values.weight_kg,
-			birthday: values.birthday,
-			number: String(Number(values.number)),
-		}
+		const formData = new FormData()
 
-		// Редактирование существующего игрока
-		if (isEditPlayer) {
-			const player = players.find((p) => p.name === editPlayer.name) as IPlayer
-			const index = players.indexOf(player)
+		formData.append('image', photoRaw)
 
-			newPlayersList = players
-			newPlayersList[index] = newValues
-		} else {
-			// Добавление нового игрока
-			newPlayersList = [...players, newValues]
-		}
-
-		// Обновление контекста игрока и localStorage
-		setPlayers(newPlayersList)
-		localStorage.setItem('players', JSON.stringify(newPlayersList))
-
-		// Отображение уведомления об успехе
-		if (isEditPlayer) sendNotification('Your player has been edited successfully', 'success')
-		else {
-			sendNotification('Your player has been added successfully', 'success')
-			setValues({
-				photo: '/photos/placeholder.png',
-				name: '',
-				position: '',
-				team: '',
-				height_cm: '',
-				weight_kg: '',
-				birthday: '',
-				number: '',
+		// удаление предыдущей фотографии, если произошла замена на другую при редактировании игрока
+		if (isEditPlayer && photoRaw) {
+			await axios.post('http://localhost:3001/delete', JSON.stringify({ imagePath: editPlayer.photo }), {
+				headers: {
+					'Content-Type': 'application/json',
+				},
 			})
-			setSelectedTeam('')
-			setSelectedPosition('')
 		}
 
-		inputsFirstPart.forEach((input) => {
-			setForcedErrorMessage({ name: input.name, isError: false })
-		})
-		inputsSecondPart.forEach((input) => {
-			setForcedErrorMessage({ name: input.name, isError: false })
-		})
+		// отправка пост запроса для загрузки фотографии
+		await axios
+			.post('http://localhost:3001/upload', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then((res): any => {
+				if (res.data.path) values.photo = 'http://localhost:3001/' + res.data.path
+				else if (!isEditPlayer) values.photo = placeholder
+
+				let newPlayersList: IPlayer[] = []
+
+				const newValues: IPlayer = {
+					photo: values.photo,
+					name: values.name,
+					position: values.position,
+					team: values.team,
+					height_cm: values.height_cm,
+					weight_kg: values.weight_kg,
+					birthday: values.birthday,
+					number: String(Number(values.number)),
+				}
+
+				// Редактирование существующего игрока
+				if (isEditPlayer) {
+					setEditPlayer(newValues)
+
+					let hasChanges: boolean = false
+					for (const key in values) {
+						if (newValues[key] !== editPlayer[key]) {
+							hasChanges = true
+							break
+						}
+					}
+					if (!hasChanges) return
+
+					const player = players.find((p) => p.name === editPlayer.name) as IPlayer
+					const index = players.indexOf(player)
+
+					newPlayersList = players
+					newPlayersList[index] = newValues
+				} else {
+					// Добавление нового игрока
+					newPlayersList = [...players, newValues]
+				}
+
+				// Обновление контекста игрока и localStorage
+				setPlayers(newPlayersList)
+				localStorage.setItem('players', JSON.stringify(newPlayersList))
+
+				// Отображение уведомления об успехе
+				if (isEditPlayer) sendNotification('Your player has been edited successfully', 'success')
+				else {
+					sendNotification('Your player has been added successfully', 'success')
+					setValues({
+						photo: '',
+						name: '',
+						position: '',
+						team: '',
+						height_cm: '',
+						weight_kg: '',
+						birthday: '',
+						number: '',
+					})
+					setSelectedTeam('')
+					setSelectedPosition('')
+					setPhotoRaw('')
+				}
+
+				inputsFirstPart.forEach((input) => {
+					setForcedErrorMessage({ name: input.name, isError: false })
+				})
+				inputsSecondPart.forEach((input) => {
+					setForcedErrorMessage({ name: input.name, isError: false })
+				})
+			})
 	}
 
 	// Функция-обработчик изменения значений полей формы
@@ -285,7 +326,7 @@ export default function NewPlayer(props: any): React.ReactElement {
 				<Notification type={notificationType} isVisible={isNotificationVisible}>
 					{notificationMessage}
 				</Notification>
-				<PhotoInput uploadRef={uploadRef} openPhoto={openPhoto} background={photoUrl} />
+				<ImageInput saveImage={openPhoto} backgroundImage={inputImageBackround} />
 				<div className={classes.inputs}>
 					{inputsFirstPart.map((input) => (
 						<MyInput

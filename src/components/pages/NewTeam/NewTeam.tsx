@@ -3,12 +3,13 @@ import classes from './NewTeam.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import MyInput from '../../UI/MyInput/MyInput'
 import MyButton from '../../UI/MyButton/MyButton'
-import PhotoInput from '../../UI/PhotoInput/PhotoInput'
+import ImageInput from '../../UI/ImageInput/ImageInput'
 import { ITeam } from '../Teams/Teams'
 import { TeamContext } from '../../context/TeamContext'
 import Notification from '../../Notification/Notification'
 import shared from '../../shared/AdditionalPages.module.css'
 import { ErrorMessageType } from '../../UI/MyInput/MyInput'
+import axios from 'axios'
 
 const timeoutMS: number = 3000
 
@@ -17,19 +18,21 @@ const currentYear = new Date().getFullYear()
 interface INewTeamProps {
 	editTeam: ITeam
 	isEditTeam: boolean
+	setEditTeam(team: ITeam): any
 }
 
 export default function NewTeam(props: any): React.ReactElement {
-	const { editTeam, isEditTeam }: INewTeamProps = props
+	const { setEditTeam, editTeam, isEditTeam }: INewTeamProps = props
 
 	const navigate = useNavigate()
 
 	const { teams, setTeams } = useContext(TeamContext)
 
-	const uploadRef = useRef<HTMLInputElement>(null)
+	const [logoRaw, setLogoRaw] = useState<any>()
 
-	const [photo, setPhoto] = useState<any>()
-	const [photoUrl, setPhotoUrl] = useState<string>('')
+	const [inputImageBackround, setInputImageBackround] = useState<string>()
+
+	const placeholder: string = '/portraits/team-placeholder.png'
 
 	const [isNotificationVisible, setIsNotificationVisible] = useState<boolean>(false)
 	const [notificationMessage, setNotificationMessage] = useState<string>('')
@@ -40,11 +43,15 @@ export default function NewTeam(props: any): React.ReactElement {
 		isError: false,
 	})
 
+	useEffect(() => {
+		if (editTeam) setInputImageBackround(editTeam.logo)
+	}, [editTeam])
+
 	const [values, setValues] = useState<ITeam>(
 		isEditTeam
 			? editTeam
 			: {
-					logo: '/portraits/team-placeholder.png', // Логотип команды по умолчанию
+					logo: '',
 					name: '',
 					division: '',
 					conference: '',
@@ -83,34 +90,13 @@ export default function NewTeam(props: any): React.ReactElement {
 		},
 	]
 
-	function openPhoto(event: any): void {
-		setPhoto(event.target.files[0])
+	function openLogo(logo: any): void {
+		setLogoRaw(logo)
+
+		const logoUrl = URL.createObjectURL(logo)
+
+		setInputImageBackround(logoUrl)
 	}
-
-	useEffect(() => {
-		return
-		//----testing-----
-
-		//input
-		const formData = new FormData()
-		formData.append('file', photo)
-		formData.append('fileName', photo.name)
-		formData.append('fileType', photo.type)
-		localStorage.setItem('uploadedPhoto', JSON.stringify(formData))
-
-		//output
-		const parsedData = JSON.parse(localStorage.getItem('uploadedPhoto') as string)
-		const newFormData = new FormData()
-		for (let key in parsedData) newFormData.append(key, parsedData[key])
-		const retrievedPhoto = newFormData.get('file')
-		const photoName = newFormData.get('fileName')
-		const photoType = newFormData.get('fileType')
-
-		const retrievedFile = new File([retrievedPhoto as any], photoName as any, { type: photoType as any })
-		setPhotoUrl(URL.createObjectURL(retrievedFile))
-
-		console.log(photoUrl)
-	}, [photo])
 
 	function sendNotification(message: string, type: string): void {
 		setNotificationMessage(message)
@@ -122,12 +108,12 @@ export default function NewTeam(props: any): React.ReactElement {
 	}
 
 	// Функция-обработчик submit формы создания/редактирования команды
-	function onFormSumbit(event: any): void {
+	async function onFormSumbit(event: any): Promise<void> {
 		event.preventDefault()
 
 		// Проверка заполненности полей
 		for (const key in values) {
-			if (values[key] === '') {
+			if (values[key] === '' && key !== 'logo') {
 				sendNotification('Some inputs are missing data', 'error')
 				return
 			}
@@ -148,49 +134,84 @@ export default function NewTeam(props: any): React.ReactElement {
 			setForcedErrorMessage({ name: 'year', isError: true })
 			return
 		}
-		
-		let newTeamsList: ITeam[] = []
-		const newValues = {
-			logo: values.logo,
-			name: values.name,
-			division: values.division,
-			conference: values.conference,
-			year: values.year,
-		}
 
-		// Редактирование существующей команды
-		if (isEditTeam) {
-			const team = teams.find((t) => t.name === editTeam.name) as ITeam
-			const index = teams.indexOf(team)
+		const formData = new FormData()
 
-			newTeamsList = teams
-			newTeamsList[index] = newValues
-		} else {
-			// Добавление новой команды
-			newTeamsList = [...teams, newValues]
-		}
+		formData.append('image', logoRaw)
 
-		// Обновление контекста команд и localStorage
-		setTeams(newTeamsList)
-		localStorage.setItem('teams', JSON.stringify(newTeamsList))
-
-		// Отображение уведомления об успехе
-		if (isEditTeam) sendNotification('Your team has been edited successfully', 'success')
-		else {
-			sendNotification('Your team has been added successfully', 'success')
-			setValues({
-				logo: '/portraits/team-placeholder.png',
-				name: '',
-				division: '',
-				conference: '',
-				year: '',
+		// удаление предыдущего логотипа, если произошла замена на другой при редактировании команды
+		if (isEditTeam && logoRaw) {
+			await axios.post('http://localhost:3001/delete', JSON.stringify({ imagePath: editTeam.logo }), {
+				headers: {
+					'Content-Type': 'application/json',
+				},
 			})
 		}
+		// отправка пост запроса для загрузки логотипа
+		await axios
+			.post('http://localhost:3001/upload', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then((res): any => {
+				if (res.data.path) values.logo = 'http://localhost:3001/' + res.data.path
+				else if (!isEditTeam) values.logo = placeholder
 
-		// скрытие ошибок для инпутов после успешной отправки формы
-		inputs.forEach((input) => {
-			setForcedErrorMessage({ name: input.name, isError: false })
-		})
+				let newTeamsList: ITeam[] = []
+
+				const newValues: ITeam = {
+					logo: values.logo,
+					name: values.name,
+					division: values.division,
+					conference: values.conference,
+					year: values.year,
+				}
+				// Редактирование существующей команды
+				if (isEditTeam) {
+					setEditTeam(newValues)
+
+					let hasChanges: boolean = false
+					for (const key in values) {
+						if (newValues[key] !== editTeam[key]) {
+							hasChanges = true
+							break
+						}
+					}
+					if (!hasChanges) return
+
+					const team = teams.find((t) => t.name === editTeam.name) as ITeam
+					const index = teams.indexOf(team)
+
+					newTeamsList = teams
+					newTeamsList[index] = newValues
+				} else {
+					// Добавление новой команды
+					newTeamsList = [...teams, newValues]
+				}
+
+				// Обновление контекста команд и localStorage
+				setTeams(newTeamsList)
+				localStorage.setItem('teams', JSON.stringify(newTeamsList))
+
+				if (isEditTeam) sendNotification('Your team has been edited successfully', 'success')
+				else {
+					sendNotification('Your team has been added successfully', 'success')
+					setValues({
+						logo: '',
+						name: '',
+						division: '',
+						conference: '',
+						year: '',
+					})
+					setLogoRaw('')
+				}
+
+				// скрытие ошибок для инпутов после успешной отправки формы
+				inputs.forEach((input) => {
+					setForcedErrorMessage({ name: input.name, isError: false })
+				})
+			})
 	}
 
 	// Функция-обработчик изменения значений полей формы
@@ -214,7 +235,7 @@ export default function NewTeam(props: any): React.ReactElement {
 				<Notification type={notificationType} isVisible={isNotificationVisible}>
 					{notificationMessage}
 				</Notification>
-				<PhotoInput uploadRef={uploadRef} openPhoto={openPhoto} background={photoUrl} />
+				<ImageInput saveImage={openLogo} backgroundImage={inputImageBackround} />
 				<div className={classes.inputs}>
 					{inputs.map((input) => (
 						<MyInput

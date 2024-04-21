@@ -1,33 +1,57 @@
 @media (min-width: 0px) and (min-height: 0px) {
 	.photo {
-		max-width: 40%;
-		max-height: 40%;
 		margin-top: 10px;
+		max-width: 100px;
+		max-height: 75px;
+		width: 100px;
+		height: 75px;
 	}
 }
 
-@media (min-width: 0px) and (min-height: 730px) {
+@media (min-width: 768px) and (min-height: 0px) {
 	.photo {
-		max-height: 150px;
-		max-width: 150px;
-		margin-top: 50px;
+		margin-top: 0;
+		max-height: 80px;
+		height: 80px;
 	}
 }
 
-@media (min-width: 768px) and (min-height: 730px) {
+
+@media (min-width: 0px) and (min-height: 930px) {
 	.photo {
-		width: 100%;
-		min-height: 10%;
-		min-width: 10%;
-		max-height: 60%;
-		max-width: 60%;
-		margin-top: 10px;
+		margin-top: 20px;
+		max-height: 100px;
+		height: 100px;
 	}
 }
+
+@media (min-width: 768px) and (min-height: 700px) {
+	.photo {
+		margin-top: 0;
+		max-height: 125px;
+		height: 125px;
+	}
+}
+
+
+@media (min-width: 768px) and (min-height: 930px) {
+	.photo {
+		margin-top: 0;
+		max-width: 300px;
+		max-height: 200px;
+		width: 300px;
+		height: 200px;
+	}
+}
+
 
 .photo {
 	object-fit: contain;
-	animation: all 0.3s ease-in-out;
+	transition: all 0.1s ease-out;
+	min-height: 50px;
+	min-width: 50px;
+	max-width: 300px;
+	width: 300px;
 }
 
 .card {

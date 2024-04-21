@@ -15,6 +15,7 @@ import { PlayerContext } from '../../context/PlayerContext'
 import { ITeam } from '../Teams/Teams'
 import SelectedPlayer from '../SelectedPlayer/SelectedPlayer'
 import { SelectedPlayerContext } from '../../context/SelectedPlayerContext'
+import axios from 'axios'
 
 export interface IPlayer {
 	photo: string
@@ -204,19 +205,26 @@ export default function Players(): React.ReactElement {
 		setCurrentAmountOfItemsPerPage(Number(item))
 	}
 
-	// Функция перехода в режим редактирования команды
 	function handleEditPlayer(player: IPlayer): void {
 		setEditPlayer(player)
 		setCurrentState(EDIT_EXIST_PLAYER_STATE)
 	}
 
-	// Функция удаления команды
-	function handleDeletePlayer(team: ITeam): void {
-		const updatedPlayersList = players.filter((p) => p.name !== team.name)
+	async function handleDeletePlayer(player: IPlayer): Promise<void> {
+		await axios.post(
+			'http://localhost:3001/delete',
+			JSON.stringify({ imagePath: player.photo }),
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		)
+		const updatedPlayersList = players.filter((p) => p.name !== player.name)
 		setPlayers(updatedPlayersList)
 		localStorage.setItem(PLAYERS, JSON.stringify(updatedPlayersList))
 
-		if (updatedPlayersList.length === currentAmountOfItemsPerPage) {
+		if (updatedPlayersList.length % currentAmountOfItemsPerPage === 0) {
 			setCurrentPage(currentPage > 0 ? currentPage - 1 : 0)
 			calculateOffset(currentPage > 0 ? currentPage - 1 : 0)
 		}
@@ -319,7 +327,7 @@ export default function Players(): React.ReactElement {
 			case NEW_PLAYER_STATE:
 				return <NewPlayer isEditPlayer={false} />
 			case EDIT_EXIST_PLAYER_STATE:
-				return <NewPlayer editPlayer={editPlayer} isEditPlayer={true} />
+				return <NewPlayer editPlayer={editPlayer} isEditPlayer={true} setEditPlayer={setEditPlayer} />
 			case SELECTED_PLAYERS_STATE:
 				return (
 					<SelectedPlayer

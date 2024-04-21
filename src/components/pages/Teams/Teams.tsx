@@ -12,6 +12,7 @@ import { teamsList } from '../../../utils/teams'
 import NewTeam from '../NewTeam/NewTeam'
 import SelectedTeam from '../SelectedTeam/SelectedTeam'
 import shared from '../../shared/MainPages.module.css'
+import axios from 'axios'
 
 const TEAMS = 'teams'
 const TEAMS_STATE: string = 'teams'
@@ -159,12 +160,21 @@ export default function Teams(): React.ReactElement {
 	}
 
 	// Функция удаления команды
-	function handleDeleteTeam(team: ITeam): void {
+	async function handleDeleteTeam(team: ITeam): Promise<void> {
+		await axios.post(
+			'http://localhost:3001/delete',
+			JSON.stringify({ imagePath: team.logo }),
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		)
 		const updatedTeamsList = teams.filter((t) => t.name !== team.name)
 		setTeams(updatedTeamsList)
 		localStorage.setItem(TEAMS, JSON.stringify(updatedTeamsList))
 
-		if (updatedTeamsList.length === currentAmountOfItemsPerPage) {
+		if (updatedTeamsList.length % currentAmountOfItemsPerPage === 0 ) {
 			setCurrentPage(currentPage > 0 ? currentPage - 1 : 0)
 			calculateOffset(currentPage > 0 ? currentPage - 1 : 0)
 		}
@@ -257,7 +267,7 @@ export default function Teams(): React.ReactElement {
 				return <NewTeam isEditTeam={false} />
 
 			case EDIT_EXIST_TEAM_STATE:
-				return <NewTeam editTeam={editTeam} isEditTeam={true} />
+				return <NewTeam editTeam={editTeam} isEditTeam={true} setEditTeam={setEditTeam} />
 
 			case SELECTED_TEAM_STATE:
 				return (

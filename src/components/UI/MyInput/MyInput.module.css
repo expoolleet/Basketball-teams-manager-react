@@ -111,6 +111,7 @@ input:invalid[data-focused='true'] {
 
 input:invalid[data-focused='true'] ~ .error_message,
 .error_message_show {
+	text-wrap: wrap;
 	margin-top: 5px;
 	font-size: 12px;
 	color: #ff768e;

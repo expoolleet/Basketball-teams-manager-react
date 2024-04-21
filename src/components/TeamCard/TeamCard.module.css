@@ -1,32 +1,40 @@
-@media (min-width: 0px) {
-	.logo {
-		max-height: 80px;
-		margin-bottom: 115px;
-		margin-top: 20px;
-	}
-}
-
-@media (min-height: 0px) {
+@media (min-width: 0px) and (min-height: 0px) {
 	.logo {
 		margin-top: 10px;
-		margin-bottom: 95px;
+		margin-bottom: 105px;
+		max-height: 80px;
+		max-width: 80px;
 	}
 }
 
-@media (min-height: 730px) {
+@media (min-width: 768px) and (min-height: 0px) {
+	.logo {
+		margin-top: 0;
+		margin-bottom: 90px;
+		max-height: 90px;
+		max-width: 90px;
+		width: 90px;
+		height: 90px;
+	}
+}
+
+@media (min-width: 0px) and (min-height: 825px) {
 	.logo {
 		margin-top: 20px;
-		margin-bottom: 120px;
+		margin-bottom: 115px;
+		max-height: 80px;
+		max-width: 80px;
 	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (min-height: 825px) {
 	.logo {
-		min-height: 30%;
-		min-width: 30%;
-		max-height: 50%;
-		max-width: 50%;
 		margin-top: 0;
+		margin-bottom: 140px;
+		max-height: 150px;
+		max-width: 150px;
+		width: 150px;
+		height: 150px;
 	}
 }
 
@@ -40,8 +48,11 @@
 }
 
 .logo {
-	padding: 5px 9px;
+	padding: 5px;
 	object-fit: contain;
+	min-height: 50px;
+	min-width: 50px;
+	transition: all 0.1s ease-out;
 }
 
 .caption h3 {

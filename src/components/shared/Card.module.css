@@ -5,8 +5,7 @@
 	}
 
 	.caption {
-		min-height: 90px;
-		max-height: 100px;
+		height: 100px;
 	}
 
 	.caption h3 {
@@ -19,14 +18,13 @@
 	}
 }
 
-@media (min-width: 768px) and (min-height: 730px) {
+@media (min-width: 768px) and (min-height: 825px) {
 	.card {
 		min-height: 49%;
 	}
 
 	.caption {
-		min-height: 120px;
-		max-height: 140px;
+		height: 140px;
 	}
 
 	.caption h3 {
@@ -47,7 +45,6 @@
 	cursor: pointer;
 	border-radius: 4px;
 	background-image: linear-gradient(121.57deg, #707070 1.62%, #393939 81.02%);
-	transition: opacity 0.15s ease-in-out;
 	animation: reveal 0.3s ease-in-out;
 }
 
@@ -66,7 +63,7 @@
 	text-wrap: pretty;
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
-	transition: all 0.3s ease-out;
+	transition: all 0.1s ease-out;
 }
 
 .caption h5 {

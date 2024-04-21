@@ -19,6 +19,8 @@
 
 	.photo {
 		width: 500px;
+		max-height: 600px;
+		object-fit: contain;
         margin: 0;
         align-self: flex-end;
 	}
