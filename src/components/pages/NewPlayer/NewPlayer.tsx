@@ -84,8 +84,6 @@ export default function NewPlayer(props: any): React.ReactElement {
 		}
 	}, [editPlayer])
 
-	console.log(editPlayer)
-
 	const inputsFirstPart = [
 		{
 			type: 'text',
@@ -246,9 +244,6 @@ export default function NewPlayer(props: any): React.ReactElement {
 					birthday: values.birthday,
 					number: String(Number(values.number)),
 				}
-
-				console.log(newValues)
-				console.log(editPlayer)
 
 				// Редактирование существующего игрока
 				if (isEditPlayer) {
