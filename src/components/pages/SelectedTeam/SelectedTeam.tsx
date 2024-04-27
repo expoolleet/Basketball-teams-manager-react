@@ -71,7 +71,7 @@ export default function SelectedTeam(props: any): React.ReactElement {
 				</div>
 			</div>
 			<figure className={[classes.background, shared.background].join(' ')}>
-				<img className={classes.logo} src={logo} alt={name} />
+				<img className={classes.logo} src={logo} alt={name} draggable='false' />
 				<figcaption className={[classes.figcaption, shared.figcaption].join(' ')}>
 					<h2 className={classes.name}>{name}</h2>
 					<h3 className={classes.year}>
@@ -113,7 +113,11 @@ export default function SelectedTeam(props: any): React.ReactElement {
 										setSelectedPlayer(player)
 										navigate('/players')
 									}}>
-									<img src={player.photo} alt={player.name} />
+									<img
+										src={player.photo}
+										alt={player.name}
+										draggable='false'
+									/>
 									<p className={classes.roster_player_caption}>
 										<span className={classes.roster_player_name}>
 											{player.name}

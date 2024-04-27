@@ -29,11 +29,18 @@ const uploadImage = upload.single('image')
 
 const PORT = 3001
 
+const HOST = 'localhost'
+
 const app = express()
 
+const whiteList = ['http://localhost:3000', 'http://25.60.93.45:3000']
+
 const corsOptions = {
-	origin: 'http://localhost:3000',
-	optionsSuccessStatus: 200,
+	origin: (origin, callback) => {
+		const originIsWhitelisted = whiteList.indexOf(origin) !== -1
+		callback(null, originIsWhitelisted)
+	},
+	credentials: true,
 }
 
 app.use(cors(corsOptions))
@@ -50,24 +57,16 @@ app.post('/upload', async (req, res) => {
 	})
 })
 
-app.post('/delete', (req, res) => {
-	let body = ' '
-	req.on('data', (chunk) => {
-		body += chunk
-	})
+app.delete('/server/uploads/:image', (req, res) => {
+	const image = req.params.image
+	const imagePath = path.join('server', 'uploads', image)
 
-	req.on('end', () => {
-		const parsed = JSON.parse(body)
-
-		const removePart = 'http://localhost:' + PORT + '/'
-		const url = './' + parsed.imagePath.replace(removePart, '')
-
-		if (fs.existsSync(url)){
-			fs.unlinkSync(url)
-		}
-
-		res.end()
-	})
+	if (fs.existsSync(imagePath)) {
+		fs.unlinkSync(imagePath)
+	}
+	res.send()
 })
 
-app.listen(PORT)
+app.listen(PORT, HOST, () => {
+	console.log(`Server ${HOST} statred on port ${PORT}`)
+})

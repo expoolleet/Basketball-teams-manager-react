@@ -44,15 +44,17 @@ export default function MyInput(props: any): React.ReactElement {
 	const dateInputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
-		if (!dateInputRef.current) return
-
-		const ref = dateInputRef
-
-		ref.current?.addEventListener('blur', hanldeDatePicker)
+		let dateRef: any
+		if (dateInputRef.current) {
+			dateRef = dateInputRef
+			dateRef.current?.addEventListener('blur', hanldeDatePicker)
+		}
 
 		return () => {
-			ref.current?.removeEventListener('blur', hanldeDatePicker)
+			if (dateRef)
+				dateRef.current?.removeEventListener('blur', hanldeDatePicker)
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	useEffect(() => {
@@ -131,7 +133,10 @@ export default function MyInput(props: any): React.ReactElement {
 							onBlur={handleFocus}
 							data-focused={isFocused}
 						/>
-						<span className={passwordFieldStyles} onClick={showPassword} />
+						<span
+							className={passwordFieldStyles}
+							onClick={showPassword}
+						/>
 					</>
 				)
 

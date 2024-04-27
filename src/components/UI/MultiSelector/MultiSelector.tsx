@@ -78,6 +78,7 @@ export default function MultiSelector(props: any): React.ReactElement {
 	function removeSelectedItem(item: string): void {
 		// удаление выбранного фильтра
 		setSelectedPositions(selectedItems.filter((i) => i !== item))
+		
 	}
 
 	function removeItems(): void {

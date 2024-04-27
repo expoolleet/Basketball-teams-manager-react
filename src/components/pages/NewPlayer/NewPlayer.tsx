@@ -11,6 +11,7 @@ import { PlayerContext } from '../../context/PlayerContext'
 import { SELECTOR_INPUT_TYPE } from '../../UI/Selector/Selector'
 import { ErrorMessageType } from '../../UI/MyInput/MyInput'
 import axios from 'axios'
+import { requestURL } from '../../../utils/requestURL'
 
 const timeoutMS: number = 3000
 
@@ -39,6 +40,8 @@ export default function NewPlayer(props: any): React.ReactElement {
 	const { players, setPlayers, teams } = useContext(PlayerContext)
 
 	const [photoRaw, setPhotoRaw] = useState<any>()
+
+	const [isPhotoUploaded, setIsPhotoUploaded] = useState<boolean>(false)
 
 	const [isNotificationVisible, setIsNotificationVisible] = useState<boolean>(false)
 	const [notificationMessage, setNotificationMessage] = useState<string>('')
@@ -159,6 +162,8 @@ export default function NewPlayer(props: any): React.ReactElement {
 	function openPhoto(photo: any): void {
 		setPhotoRaw(photo)
 
+		setIsPhotoUploaded(true)
+
 		const photoUrl = URL.createObjectURL(photo)
 
 		setInputImageBackround(photoUrl)
@@ -212,23 +217,19 @@ export default function NewPlayer(props: any): React.ReactElement {
 		formData.append('image', photoRaw)
 
 		// удаление предыдущей фотографии, если произошла замена на другую при редактировании игрока
-		if (isEditPlayer && photoRaw) {
-			await axios.post('http://localhost:3001/delete', JSON.stringify({ imagePath: editPlayer.photo }), {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
+		if (isEditPlayer && photoRaw && editPlayer.photo.includes('uploads')) {
+				await axios.delete(editPlayer.photo).catch((error) => console.error(error))
 		}
 
 		// отправка пост запроса для загрузки фотографии
 		await axios
-			.post('http://localhost:3001/upload', formData, {
+			.post(requestURL + '/upload', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 			})
 			.then((res): any => {
-				if (res.data.path) values.photo = 'http://localhost:3001/' + res.data.path
+				if (res.data.path) values.photo = requestURL + '/' + res.data.path
 				else if (!isEditPlayer) values.photo = placeholder
 
 				let newPlayersList: IPlayer[] = []
@@ -255,7 +256,7 @@ export default function NewPlayer(props: any): React.ReactElement {
 							break
 						}
 					}
-					if (!hasChanges) return
+					if (!hasChanges && !isPhotoUploaded) return
 
 					const player = players.find((p) => p.name === editPlayer.name) as IPlayer
 					const index = players.indexOf(player)
@@ -288,6 +289,7 @@ export default function NewPlayer(props: any): React.ReactElement {
 					setSelectedTeam('')
 					setSelectedPosition('')
 					setPhotoRaw('')
+					setInputImageBackround('')
 				}
 
 				inputsFirstPart.forEach((input) => {

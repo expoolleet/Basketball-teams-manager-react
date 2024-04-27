@@ -1,0 +1,1 @@
+export const requestURL : string = 'http://localhost:3001'

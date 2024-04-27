@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classes from './NewTeam.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import MyInput from '../../UI/MyInput/MyInput'
@@ -10,6 +10,7 @@ import Notification from '../../Notification/Notification'
 import shared from '../../shared/AdditionalPages.module.css'
 import { ErrorMessageType } from '../../UI/MyInput/MyInput'
 import axios from 'axios'
+import { requestURL } from '../../../utils/requestURL'
 
 const timeoutMS: number = 3000
 
@@ -29,6 +30,8 @@ export default function NewTeam(props: any): React.ReactElement {
 	const { teams, setTeams } = useContext(TeamContext)
 
 	const [logoRaw, setLogoRaw] = useState<any>()
+
+	const [isLogoUploaded, setIsLogoUploaded] = useState<boolean>(false)
 
 	const [inputImageBackround, setInputImageBackround] = useState<string>()
 
@@ -93,6 +96,8 @@ export default function NewTeam(props: any): React.ReactElement {
 	function openLogo(logo: any): void {
 		setLogoRaw(logo)
 
+		setIsLogoUploaded(true)
+
 		const logoUrl = URL.createObjectURL(logo)
 
 		setInputImageBackround(logoUrl)
@@ -140,22 +145,18 @@ export default function NewTeam(props: any): React.ReactElement {
 		formData.append('image', logoRaw)
 
 		// удаление предыдущего логотипа, если произошла замена на другой при редактировании команды
-		if (isEditTeam && logoRaw) {
-			await axios.post('http://localhost:3001/delete', JSON.stringify({ imagePath: editTeam.logo }), {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
+		if (isEditTeam && logoRaw && editTeam.logo.includes('uploads')) {
+				await axios.delete(editTeam.logo).catch((error) => console.error(error))
 		}
 		// отправка пост запроса для загрузки логотипа
 		await axios
-			.post('http://localhost:3001/upload', formData, {
+			.post(requestURL + '/upload', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 			})
 			.then((res): any => {
-				if (res.data.path) values.logo = 'http://localhost:3001/' + res.data.path
+				if (res.data.path) values.logo = requestURL + '/' + res.data.path
 				else if (!isEditTeam) values.logo = placeholder
 
 				let newTeamsList: ITeam[] = []
@@ -178,7 +179,7 @@ export default function NewTeam(props: any): React.ReactElement {
 							break
 						}
 					}
-					if (!hasChanges) return
+					if (!hasChanges && !isLogoUploaded) return
 
 					const team = teams.find((t) => t.name === editTeam.name) as ITeam
 					const index = teams.indexOf(team)
@@ -205,6 +206,8 @@ export default function NewTeam(props: any): React.ReactElement {
 						year: '',
 					})
 					setLogoRaw('')
+					setInputImageBackround('')
+					setIsLogoUploaded(false)
 				}
 
 				// скрытие ошибок для инпутов после успешной отправки формы

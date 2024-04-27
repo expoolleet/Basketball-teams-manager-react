@@ -45,7 +45,7 @@ export default function SelectedPlayer(props: any): React.ReactElement {
 				</div>
 			</div>
 			<figure className={[classes.background, shared.background].join(' ')}>
-				<img className={classes.photo} src={photo} alt={name} />
+				<img className={classes.photo} src={photo} alt={name} draggable='false' />
 				<figcaption className={[classes.figcaption, shared.figcaption].join(' ')}>
 					<h2 className={classes.name}>
 						{name} <span className={classes.number}>{number !== '' ? '#' + number : ''}</span>

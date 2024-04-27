@@ -211,15 +211,11 @@ export default function Players(): React.ReactElement {
 	}
 
 	async function handleDeletePlayer(player: IPlayer): Promise<void> {
-		await axios.post(
-			'http://localhost:3001/delete',
-			JSON.stringify({ imagePath: player.photo }),
-			{
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			}
-		)
+		if (player.photo.includes('uploads'))
+			await axios
+			.delete(player.photo)
+			.catch((error) => console.error(error))
+
 		const updatedPlayersList = players.filter((p) => p.name !== player.name)
 		setPlayers(updatedPlayersList)
 		localStorage.setItem(PLAYERS, JSON.stringify(updatedPlayersList))

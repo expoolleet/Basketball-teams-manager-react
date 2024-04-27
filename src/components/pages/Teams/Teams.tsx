@@ -161,20 +161,16 @@ export default function Teams(): React.ReactElement {
 
 	// Функция удаления команды
 	async function handleDeleteTeam(team: ITeam): Promise<void> {
-		await axios.post(
-			'http://localhost:3001/delete',
-			JSON.stringify({ imagePath: team.logo }),
-			{
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			}
-		)
+		if (team.logo.includes('uploads'))
+			await axios
+			.delete(team.logo)
+			.catch((error) => console.error(error))
+
 		const updatedTeamsList = teams.filter((t) => t.name !== team.name)
 		setTeams(updatedTeamsList)
 		localStorage.setItem(TEAMS, JSON.stringify(updatedTeamsList))
 
-		if (updatedTeamsList.length % currentAmountOfItemsPerPage === 0 ) {
+		if (updatedTeamsList.length % currentAmountOfItemsPerPage === 0) {
 			setCurrentPage(currentPage > 0 ? currentPage - 1 : 0)
 			calculateOffset(currentPage > 0 ? currentPage - 1 : 0)
 		}

@@ -42,6 +42,10 @@
 	justify-content: center;
 }
 
+.card:hover .logo{
+	transform: scale(1.05);
+}
+
 .caption {
 	bottom: 0;
 	position: absolute;
