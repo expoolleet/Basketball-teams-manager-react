@@ -33,7 +33,7 @@ const HOST = 'localhost'
 
 const app = express()
 
-const whiteList = ['http://localhost:3000', 'http://25.60.93.45:3000']
+const whiteList = ['http://localhost:3000']
 
 const corsOptions = {
 	origin: (origin, callback) => {

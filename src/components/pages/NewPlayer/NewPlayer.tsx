@@ -84,6 +84,8 @@ export default function NewPlayer(props: any): React.ReactElement {
 		}
 	}, [editPlayer])
 
+	console.log(editPlayer)
+
 	const inputsFirstPart = [
 		{
 			type: 'text',
@@ -151,12 +153,12 @@ export default function NewPlayer(props: any): React.ReactElement {
 
 	function handlePositionSelector(position: string): void {
 		setSelectedPosition(position)
-		values['position'] = position
+		setValues({...values, 'position' : position})
 	}
 
 	function handleTeamSelector(team: string): void {
 		setSelectedTeam(team)
-		values['team'] = team
+		setValues({...values, 'team' : team})
 	}
 
 	function openPhoto(photo: any): void {
@@ -218,7 +220,7 @@ export default function NewPlayer(props: any): React.ReactElement {
 
 		// удаление предыдущей фотографии, если произошла замена на другую при редактировании игрока
 		if (isEditPlayer && photoRaw && editPlayer.photo.includes('uploads')) {
-				await axios.delete(editPlayer.photo).catch((error) => console.error(error))
+			await axios.delete(editPlayer.photo).catch((error) => console.error(error))
 		}
 
 		// отправка пост запроса для загрузки фотографии
@@ -245,10 +247,11 @@ export default function NewPlayer(props: any): React.ReactElement {
 					number: String(Number(values.number)),
 				}
 
+				console.log(newValues)
+				console.log(editPlayer)
+
 				// Редактирование существующего игрока
 				if (isEditPlayer) {
-					setEditPlayer(newValues)
-
 					let hasChanges: boolean = false
 					for (const key in values) {
 						if (newValues[key] !== editPlayer[key]) {
@@ -256,7 +259,9 @@ export default function NewPlayer(props: any): React.ReactElement {
 							break
 						}
 					}
+
 					if (!hasChanges && !isPhotoUploaded) return
+					setEditPlayer(newValues)
 
 					const player = players.find((p) => p.name === editPlayer.name) as IPlayer
 					const index = players.indexOf(player)
