@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Manager for basketball teams based on React
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
